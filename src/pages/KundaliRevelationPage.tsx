@@ -12,6 +12,7 @@ import { PlanetaryPanel } from '../components/revelation/PlanetaryPanel';
 import { SacredInterpretationPanel } from '../components/revelation/SacredInterpretationPanel';
 import { ExportSection } from '../components/revelation/ExportSection';
 import { CosmicRevealSequence } from '../components/revelation/CosmicRevealSequence';
+import { RoyalManuscriptModal } from '../components/manuscript/RoyalManuscriptModal';
 import { SacredFooter } from '../components/hall/SacredFooter';
 import { paperReveal } from '../components/animations/variants';
 import { TempleButton } from '../components/ui/TempleButton';
@@ -34,6 +35,7 @@ export const KundaliRevelationPage: React.FC = () => {
   const timeStr = state.time ? `${state.time.hour}:${state.time.minute < 10 ? '0' + state.time.minute : state.time.minute} ${state.time.period}` : '6:30 AM';
 
   const [isPlayingSequence, setIsPlayingSequence] = useState<boolean>(true);
+  const [isManuscriptModalOpen, setIsManuscriptModalOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -43,6 +45,13 @@ export const KundaliRevelationPage: React.FC = () => {
           <CosmicRevealSequence onComplete={() => setIsPlayingSequence(false)} />
         )}
       </AnimatePresence>
+
+      {/* Royal Manuscript Generator & Interactive Preview Modal */}
+      <RoyalManuscriptModal
+        isOpen={isManuscriptModalOpen}
+        onClose={() => setIsManuscriptModalOpen(false)}
+        rawBirthData={state}
+      />
 
       {/* Main Masterpiece View */}
       <GlobalBackground>
@@ -106,8 +115,11 @@ export const KundaliRevelationPage: React.FC = () => {
             {/* Sacred Margin Interpretation Card */}
             <SacredInterpretationPanel />
 
-            {/* Export Actions (Download, Share, Print, Replay) */}
-            <ExportSection onReplaySequence={() => setIsPlayingSequence(true)} />
+            {/* Export Actions (Download Royal Manuscript, Share, Print, Replay) */}
+            <ExportSection
+              onReplaySequence={() => setIsPlayingSequence(true)}
+              onOpenManuscriptModal={() => setIsManuscriptModalOpen(true)}
+            />
           </PageContainer>
         </main>
 

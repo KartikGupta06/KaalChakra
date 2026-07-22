@@ -5,15 +5,21 @@ import { useSound } from '../../context/AudioContext';
 
 interface ExportSectionProps {
   onReplaySequence?: () => void;
+  onOpenManuscriptModal?: () => void;
 }
 
-export const ExportSection: React.FC<ExportSectionProps> = ({ onReplaySequence }) => {
+export const ExportSection: React.FC<ExportSectionProps> = ({
+  onReplaySequence,
+  onOpenManuscriptModal,
+}) => {
   const navigate = useNavigate();
   const { playSound } = useSound();
 
-  const handleDisabledAction = (label: string) => {
-    playSound('ink-stroke');
-    alert(`${label} will awaken in a future calculation phase.`);
+  const handleOpenManuscript = () => {
+    playSound('paper-flip');
+    if (onOpenManuscriptModal) {
+      onOpenManuscriptModal();
+    }
   };
 
   return (
@@ -33,27 +39,27 @@ export const ExportSection: React.FC<ExportSectionProps> = ({ onReplaySequence }
       )}
 
       <TempleButton
-        variant="secondary"
+        variant="primary"
         size="sm"
-        onClick={() => handleDisabledAction('Download Kundali PDF')}
+        onClick={handleOpenManuscript}
       >
-        📥 Download Kundali (Coming Soon)
+        📜 Download Royal Manuscript
       </TempleButton>
 
       <TempleButton
         variant="secondary"
         size="sm"
-        onClick={() => handleDisabledAction('Share Chart')}
+        onClick={handleOpenManuscript}
       >
-        🔗 Share Chart (Coming Soon)
+        🔗 Share Manuscript
       </TempleButton>
 
       <TempleButton
         variant="ghost"
         size="sm"
-        onClick={() => handleDisabledAction('Print Manuscript')}
+        onClick={handleOpenManuscript}
       >
-        🖨 Print Manuscript (Coming Soon)
+        🖨 Print Manuscript
       </TempleButton>
     </div>
   );
