@@ -113,7 +113,7 @@ export const KundaliRevelationPage: React.FC = () => {
             <AncientDivider symbol="flower" />
 
             {/* Sacred Margin Interpretation Card */}
-            <SacredInterpretationPanel />
+            <SacredInterpretationPanel birthData={state} />
 
             {/* Export Actions (Download Royal Manuscript, Share, Print, Replay) */}
             <ExportSection

@@ -26,6 +26,7 @@ const PAGE_TITLES = [
   '9. Panchang Snapshot (पञ्चाङ्ग)',
   '10. Glossary (शब्दावली)',
   '11. Certification (प्रमाण पत्र)',
+  '12. Wisdom Interpretation (ज्ञान व्याख्या)',
 ];
 
 export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
@@ -93,7 +94,7 @@ export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
 
   const handleNextPage = () => {
     playSound('ink-stroke');
-    setActivePage((p) => Math.min(11, p + 1));
+    setActivePage((p) => Math.min(PAGE_TITLES.length, p + 1));
   };
 
   const handlePrevPage = () => {
@@ -327,7 +328,7 @@ export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
                         : 'bg-kc-temple-brown text-kc-text-muted hover:text-kc-paper'
                     }`}
                   >
-                    Full 11-Page Scroll
+                    Full {PAGE_TITLES.length}-Page Scroll
                   </button>
                 </div>
 
@@ -338,9 +339,9 @@ export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
                       ◀ Prev Page
                     </TempleButton>
                     <span className="font-heading font-bold text-kc-gold">
-                      Page {activePage} of 11
+                      Page {activePage} of {PAGE_TITLES.length}
                     </span>
-                    <TempleButton variant="ghost" size="sm" onClick={handleNextPage} disabled={activePage === 11}>
+                    <TempleButton variant="ghost" size="sm" onClick={handleNextPage} disabled={activePage === PAGE_TITLES.length}>
                       Next Page ▶
                     </TempleButton>
                   </div>

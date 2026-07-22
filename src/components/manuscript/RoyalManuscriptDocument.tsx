@@ -11,17 +11,20 @@ import { ManuscriptNavamsaPage } from './sections/ManuscriptNavamsaPage';
 import { ManuscriptPanchangSnapshotPage } from './sections/ManuscriptPanchangSnapshotPage';
 import { ManuscriptGlossaryPage } from './sections/ManuscriptGlossaryPage';
 import { ManuscriptCertificationPage } from './sections/ManuscriptCertificationPage';
+import { ManuscriptWisdomPage } from './sections/ManuscriptWisdomPage';
 
 interface RoyalManuscriptDocumentProps {
   data: RoyalManuscriptData;
-  activePageIndex?: number; // Optional index (1-11) for page-by-page viewing in previewer
+  activePageIndex?: number;
   isSinglePagePreview?: boolean;
+  includeWisdomPage?: boolean;
 }
 
 export const RoyalManuscriptDocument: React.FC<RoyalManuscriptDocumentProps> = ({
   data,
   activePageIndex,
   isSinglePagePreview = false,
+  includeWisdomPage = true,
 }) => {
   const pages = [
     <ManuscriptCoverPage key="page-1" data={data} />,
@@ -37,8 +40,12 @@ export const RoyalManuscriptDocument: React.FC<RoyalManuscriptDocumentProps> = (
     <ManuscriptCertificationPage key="page-11" data={data} />,
   ];
 
+  if (includeWisdomPage) {
+    pages.push(<ManuscriptWisdomPage key="page-12" data={data} />);
+  }
+
   if (isSinglePagePreview && activePageIndex !== undefined) {
-    const safeIndex = Math.max(0, Math.min(10, activePageIndex - 1));
+    const safeIndex = Math.max(0, Math.min(pages.length - 1, activePageIndex - 1));
     return <div id="royal-manuscript-single-page">{pages[safeIndex]}</div>;
   }
 

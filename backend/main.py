@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.api.panchang_router import router as panchang_router
 from backend.api.kundali_router import router as kundali_router
 from backend.api.location_router import router as location_router
+from backend.api.wisdom_router import router as wisdom_router
 
 app = FastAPI(
     title="Kalachakra — Celestial Computation Engine",
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(panchang_router)
 app.include_router(kundali_router)
 app.include_router(location_router)
+app.include_router(wisdom_router)
 
 
 @app.get("/")
