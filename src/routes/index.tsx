@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { CinematicSplash } from '../components/splash/CinematicSplash';
 import { SacredHallPage } from '../pages/SacredHallPage';
-import { KundaliModulePage } from '../pages/modules/KundaliModulePage';
+import { BirthChamberPage } from '../pages/BirthChamberPage';
+import { KundaliViewPlaceholderPage } from '../pages/KundaliViewPlaceholderPage';
 import { PanchangModulePage } from '../pages/modules/PanchangModulePage';
 import { CalendarModulePage } from '../pages/modules/CalendarModulePage';
 import { MuhuratModulePage } from '../pages/modules/MuhuratModulePage';
@@ -21,8 +22,11 @@ export const AppRoutes: React.FC = () => {
         {/* Phase 3 Main Experience Hub: The Sacred Hall */}
         <Route path="/app" element={<SacredHallPage />} />
 
-        {/* Phase 3 Module Destinations */}
-        <Route path="/kundali" element={<KundaliModulePage />} />
+        {/* Phase 4 Birth Chamber */}
+        <Route path="/kundali" element={<BirthChamberPage />} />
+        <Route path="/kundali/view" element={<KundaliViewPlaceholderPage />} />
+
+        {/* Module Destinations */}
         <Route path="/panchang" element={<PanchangModulePage />} />
         <Route path="/calendar" element={<CalendarModulePage />} />
         <Route path="/muhurat" element={<MuhuratModulePage />} />
