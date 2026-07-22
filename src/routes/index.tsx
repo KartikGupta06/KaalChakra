@@ -7,7 +7,7 @@ import { KundaliRevelationPage } from '../pages/KundaliRevelationPage';
 import { CelestialObservatoryPage } from '../pages/CelestialObservatoryPage';
 import { PanchangModulePage } from '../pages/modules/PanchangModulePage';
 import { CalendarModulePage } from '../pages/modules/CalendarModulePage';
-import { MuhuratModulePage } from '../pages/modules/MuhuratModulePage';
+import { MuhuratChamberPage } from '../pages/modules/MuhuratChamberPage';
 import { HoroscopeModulePage } from '../pages/modules/HoroscopeModulePage';
 import { AboutModulePage } from '../pages/modules/AboutModulePage';
 import { SettingsModulePage } from '../pages/modules/SettingsModulePage';
@@ -33,7 +33,7 @@ export const AppRoutes: React.FC = () => {
         {/* Module Destinations */}
         <Route path="/panchang" element={<PanchangModulePage />} />
         <Route path="/calendar" element={<CalendarModulePage />} />
-        <Route path="/muhurat" element={<MuhuratModulePage />} />
+        <Route path="/muhurat" element={<MuhuratChamberPage />} />
         <Route path="/horoscope" element={<HoroscopeModulePage />} />
         <Route path="/about" element={<AboutModulePage />} />
         <Route path="/settings" element={<SettingsModulePage />} />
