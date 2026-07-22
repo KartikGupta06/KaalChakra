@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { GlobalBackground } from '../backgrounds/GlobalBackground';
 import { Header } from '../layout/Header';
@@ -15,20 +15,53 @@ import { SacredFooter } from '../hall/SacredFooter';
 import { TODAY_PANCHANG } from '../../constants/panchangDefaults';
 import { PanchangData } from '../../types/panchang';
 import { paperReveal } from '../animations/variants';
+import { fetchTodayPanchang, fetchPanchangForDate } from '../../services/api';
 
 export const LivingPanchang: React.FC = () => {
   const [data, setData] = useState<PanchangData>(TODAY_PANCHANG);
+  const [dayOffset, setDayOffset] = useState<number>(0);
+  const [isLive, setIsLive] = useState<boolean>(false);
+
+  // Fetch Panchang from backend on mount and when day changes
+  const loadPanchang = useCallback(async (offset: number) => {
+    if (offset === 0) {
+      // Today
+      const result = await fetchTodayPanchang('Ujjain');
+      if (result) {
+        setData(result);
+        setIsLive(true);
+      } else {
+        setData(TODAY_PANCHANG);
+        setIsLive(false);
+      }
+    } else {
+      // Offset day
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + offset);
+      const dateStr = targetDate.toISOString().split('T')[0]; // YYYY-MM-DD
+      const result = await fetchPanchangForDate(dateStr, 'Ujjain');
+      if (result) {
+        setData(result);
+        setIsLive(true);
+      }
+      // If API fails for offset days, keep current data
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPanchang(dayOffset);
+  }, [dayOffset, loadPanchang]);
 
   const handlePrevDay = () => {
-    // Smooth sample date offset for demonstration
+    setDayOffset((prev) => prev - 1);
   };
 
   const handleToday = () => {
-    setData(TODAY_PANCHANG);
+    setDayOffset(0);
   };
 
   const handleNextDay = () => {
-    // Smooth sample date offset for demonstration
+    setDayOffset((prev) => prev + 1);
   };
 
   return (
@@ -53,6 +86,12 @@ export const LivingPanchang: React.FC = () => {
               <Caption className="mt-1 text-center max-w-md">
                 Observe the live astronomical motion of the Sun, Moon, and 27 Nakshatras governing the five pillars of Vedic time.
               </Caption>
+              {isLive && (
+                <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-heading font-semibold uppercase tracking-wider text-green-700 dark:text-green-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                  Live Computation Engine Active
+                </span>
+              )}
 
               {/* Manuscript Page Turn Controls */}
               <PanchangNavigation

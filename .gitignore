@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 tsconfig.tsbuildinfo
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
