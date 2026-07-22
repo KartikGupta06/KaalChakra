@@ -1,6 +1,6 @@
 # Kalachakra — Engine Architecture (दिव्य गणना यन्त्र)
 
-Technical documentation for the Celestial Computation Engine powering Kalachakra's Vedic astronomical calculations.
+Technical documentation for the Celestial Computation Engine powering Kalachakra's Vedic astronomical and astrological calculations.
 
 ---
 
@@ -12,23 +12,27 @@ Technical documentation for the Celestial Computation Engine powering Kalachakra
 │                                                                 │
 │  src/services/api.ts  →  fetch('/api/...')                      │
 │  src/components/panchang/LivingPanchang.tsx ← PanchangData      │
-│  src/types/panchang.ts ← TypeScript interfaces                  │
+│  src/components/birth/HeroManuscript.tsx → generateKundali()   │
+│  src/pages/KundaliRevelationPage.tsx ← KundaliResponse          │
 └──────────────────────────┬──────────────────────────────────────┘
                            │  HTTP (Vite proxy → localhost:8000)
                            ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                  BACKEND (FastAPI / Python)                      │
 │                                                                 │
-│  ┌──────────┐    ┌──────────────┐    ┌────────────────────┐     │
-│  │ API Layer│───▶│ Service Layer│───▶│ Swiss Ephemeris     │     │
-│  │ (Routers)│    │ (Calculation)│    │ (pyswisseph)        │     │
-│  └──────────┘    └──────────────┘    └────────────────────┘     │
-│       │                │                                        │
-│       ▼                ▼                                        │
-│  ┌──────────┐    ┌──────────────┐                               │
-│  │ Pydantic │    │    Cache     │                               │
-│  │ Models   │    │  (In-Memory) │                               │
-│  └──────────┘    └──────────────┘                               │
+│  ┌──────────┐    ┌─────────────────────────┐    ┌─────────────┐ │
+│  │ API Layer│───▶│ Kundali & Panchang      │───▶│ Swiss       │ │
+│  │ (Routers)│    │ Calculation Engines     │    │ Ephemeris   │ │
+│  └──────────┘    └─────────────────────────┘    └─────────────┘ │
+│       │                 │                                       │
+│       ▼                 ▼                                       │
+│  ┌──────────┐    ┌─────────────────────────┐                    │
+│  │ Pydantic │    │  Modular Kundali Sub-   │                    │
+│  │ Models   │    │  services (Lagna,       │                    │
+│  └──────────┘    │  Houses, Navamsa,       │                    │
+│                  │  Dignities, Aspects,     │                    │
+│                  │  Yogas, Strengths)      │                    │
+│                  └─────────────────────────┘                    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -36,7 +40,7 @@ Technical documentation for the Celestial Computation Engine powering Kalachakra
 
 ## Data Flow
 
-### Panchang Calculation Pipeline
+### 1. Panchang Calculation Pipeline
 
 ```
 1. Frontend calls GET /api/panchang/today?city=Ujjain
@@ -57,21 +61,34 @@ Technical documentation for the Celestial Computation Engine powering Kalachakra
 5. Build PanchangResponse → cache → return JSON
 ```
 
-### Kundali Calculation Pipeline
+### 2. Divine Kundali Engine Calculation Pipeline (Phase 8)
 
 ```
-1. Frontend calls POST /api/kundali/generate with birth data
-2. Parse birth datetime + resolve location
-3. Convert to UTC Julian Day
-4. Swiss Ephemeris: Calculate Ascendant (Lagna)
-5. For each of 9 Navagrahas:
-   a. Get tropical longitude via swe.calc_ut()
-   b. Subtract Ayanamsha → Sidereal longitude
-   c. Map to Rashi (30° segments) and Nakshatra (13°20' segments)
-   d. Calculate house from Lagna (Whole Sign system)
-   e. Detect retrograde (negative daily speed)
-6. Ketu = Rahu + 180°
-7. Build KundaliResponse → return JSON
+1. Frontend submits birth data via POST /api/kundali/generate
+2. Resolve coordinates and timezone (Ujjain default if custom city)
+3. Convert local birth time to UTC Julian Day
+4. Lagna Service (lagna.py):
+   a. Swiss Ephemeris swe.houses() → Tropical Ascendant
+   b. Subtract Lahiri Ayanamsha → Sidereal Ascendant (Lagna)
+   c. Compute Lagna degree, Rashi, Nakshatra, Pada
+5. House Service (houses.py):
+   a. Whole Sign System: House 1 = Lagna's Rashi, progressing 1 to 12
+   b. Assign Rashi lords and contained Grahas per house
+6. Planetary Engine (planetary.py & dignities.py):
+   a. Sidereal longitudes, signs, Nakshatras, degrees for 9 Navagrahas
+   b. Planetary Dignities: Exalted (Ucha), Debilitated (Neecha), Own Sign (Swak), Neutral (Sama)
+7. Navamsa D9 Module (navamsa.py):
+   a. Divide 30° Rashi into 9 segments of 3°20'
+   b. Calculate D9 sign based on element rules (Fire -> Mesh, Earth -> Makar, Air -> Tula, Water -> Kark)
+8. Vedic Aspects Module (aspects.py):
+   a. Universal 7th house Drishti for all planets
+   b. Special aspects: Mars (4th, 8th), Jupiter (5th, 9th), Saturn (3rd, 10th)
+9. Yogas Framework (yogas.py):
+   a. Gajakesari Yoga (Jupiter in Kendra from Moon)
+   b. Budhaditya Yoga (Sun & Mercury conjunct)
+   c. Chandra Mangala Yoga (Moon & Mars conjunct)
+   d. Neecha Bhanga Raja Yoga (Debilitated planet cancellation)
+10. Build & Serialize canonical KundaliResponse → Return JSON to frontend
 ```
 
 ---
@@ -85,57 +102,37 @@ Technical documentation for the Celestial Computation Engine powering Kalachakra
 | **Panchang** | `services/panchang.py` | 5 Panchang pillars, Paksha, Lunar Month, Samvat, Ritu, Ayana |
 | **Planetary** | `services/planetary.py` | 9 Navagraha sidereal positions, Ascendant |
 | **Location** | `services/location.py` | Built-in city database, fuzzy search, coordinate resolution |
+| **Kundali Orchestrator** | `services/kundali/engine.py` | Master calculation orchestrator |
+| **Lagna Engine** | `services/kundali/lagna.py` | True Sidereal Ascendant calculation |
+| **House Engine** | `services/kundali/houses.py` | Whole Sign house division & planet mapping |
+| **Navamsa D9** | `services/kundali/navamsa.py` | D9 Navamsa chart calculation |
+| **Dignities** | `services/kundali/dignities.py` | Planetary dignities (Ucha, Neecha, Swakshetra, Sama) |
+| **Aspects** | `services/kundali/aspects.py` | Classical Vedic Drishti (7th + special aspects) |
+| **Yogas Engine** | `services/kundali/yogas.py` | Expandable Yoga detection engine |
+| **Strengths** | `services/kundali/strengths.py` | Planetary strength evaluation framework |
 
 ---
 
 ## API Contracts
 
-### GET /api/panchang/today
-**Query**: `?city=Ujjain` or `?lat=23.17&lng=75.78`
-**Response**: `PanchangResponse` (maps 1:1 to frontend `PanchangData`)
-
-### GET /api/panchang/date
-**Query**: `?date=2026-07-22&city=Ujjain`
-**Response**: `PanchangResponse`
-
 ### POST /api/kundali/generate
-**Body**: `{ fullName, dateOfBirth, timeOfBirth, city }`
-**Response**: `KundaliResponse` with 9 `PlanetPosition` objects
-
-### GET /api/location/search
-**Query**: `?q=Vara`
-**Response**: `List[LocationResolved]`
-
----
-
-## Key Assumptions
-
-1. **Ayanamsha**: Lahiri (Chitrapaksha) — the Indian government standard.
-2. **House System**: Whole Sign houses from the Ascendant (Lagna).
-3. **Rahu/Ketu**: True Node is used for Rahu; Ketu = Rahu + 180°.
-4. **Timezone**: Currently hardcoded to IST (+5:30) for Indian cities.
-5. **Samvat**: Vikram Samvat = Gregorian Year + 57 (approximate).
+**Body**:
+```json
+{
+  "fullName": "Observer",
+  "dateOfBirth": "1998-08-15",
+  "timeOfBirth": "06:30",
+  "city": "Ujjain"
+}
+```
+**Response**: `KundaliResponse` with `ascendant`, 9 `planets`, 12 `houses`, `navamsa` D9 chart, `aspects`, and detected `yogas`.
 
 ---
 
-## Running Locally
+## Running Automated Tests
 
 ```bash
-# Start the backend
-python -m uvicorn backend.main:app --reload
-
-# Start the frontend (in a separate terminal)
-npm run dev
+python -m pytest backend/tests/ -v
 ```
 
-The Vite dev server proxies `/api/*` → `http://localhost:8000`.
-
----
-
-## Future Extension Points
-
-- **Real timezone resolution**: Use `pytz` or `zoneinfo` for dynamic UTC offset.
-- **Geocoding API**: Integrate Google/OSM geocoding for arbitrary locations.
-- **Dasha calculations**: Extend `services/planetary.py` for Vimshottari Dasha.
-- **Festival calendar**: Create `services/calendar.py` for Hindu festival detection.
-- **Muhurat engine**: Create `services/muhurat.py` for auspicious time calculations.
+Executes all 45 automated unit tests for astronomy, panchang, planetary, and Kundali engine services.

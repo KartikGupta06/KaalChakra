@@ -10,6 +10,7 @@ import { RevealKundaliButton } from './RevealKundaliButton';
 import { WaxSeal } from '../decorations/WaxSeal';
 import { AncientDivider } from '../decorations/AncientDivider';
 import { useSound } from '../../context/AudioContext';
+import { generateKundali } from '../../services/api';
 
 export const HeroManuscript: React.FC = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export const HeroManuscript: React.FC = () => {
     setGender(g);
   };
 
-  const handleReveal = () => {
+  const handleReveal = async () => {
     if (!fullName.trim()) {
       setError('Please enter your full name to record in the sacred manuscript.');
       return;
@@ -40,12 +41,39 @@ export const HeroManuscript: React.FC = () => {
     setError('');
     setIsRevealing(true);
 
+    // Format 24-hour time string
+    let h24 = time.hour;
+    if (time.period === 'PM' && h24 < 12) h24 += 12;
+    if (time.period === 'AM' && h24 === 12) h24 = 0;
+    const timeOfBirth = `${h24 < 10 ? '0' + h24 : h24}:${time.minute < 10 ? '0' + time.minute : time.minute}`;
+    const dateOfBirth = `${date.year}-${date.month < 10 ? '0' + date.month : date.month}-${date.day < 10 ? '0' + date.day : date.day}`;
+
+    // Clean place string (e.g. "Ujjain (उज्जैन)" -> "Ujjain")
+    const cleanCity = place.split(' ')[0] || 'Ujjain';
+
+    // Call Celestial Computation Engine API
+    const kundaliResult: any = await generateKundali({
+      fullName,
+      dateOfBirth,
+      timeOfBirth,
+      city: cleanCity,
+    });
+
     // Ink spread & golden illumination sequence before transition
     setTimeout(() => {
       navigate('/kundali/view', {
-        state: { fullName, gender, date, time, place },
+        state: {
+          fullName,
+          gender,
+          date,
+          time,
+          place,
+          planets: kundaliResult?.planets,
+          ascendantSign: kundaliResult?.ascendantSign,
+          yogas: kundaliResult?.yogas,
+        },
       });
-    }, 1200);
+    }, 1000);
   };
 
   return (

@@ -25,6 +25,7 @@ export const KundaliRevelationPage: React.FC = () => {
     date?: { day: number; month: number; year: number };
     time?: { hour: number; minute: number; period: string };
     place?: string;
+    planets?: any[];
   }) || {};
 
   const name = state.fullName || 'Observer';
@@ -90,12 +91,12 @@ export const KundaliRevelationPage: React.FC = () => {
 
                 {/* Center Column: North Indian Kundali Chart */}
                 <div className="lg:col-span-6 w-full order-1 lg:order-2">
-                  <NorthIndianKundali />
+                  <NorthIndianKundali planets={state.planets} />
                 </div>
 
                 {/* Right Column: Planetary Alignment Table */}
                 <div className="lg:col-span-3 w-full order-3">
-                  <PlanetaryPanel />
+                  <PlanetaryPanel planets={state.planets} />
                 </div>
               </div>
             </SectionWrapper>

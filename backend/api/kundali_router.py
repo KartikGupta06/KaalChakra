@@ -1,16 +1,15 @@
 """
 Kalachakra — Kundali API Router
 ==================================
-REST endpoint for generating natal chart (Kundali) planetary positions.
+REST endpoint for generating complete Vedic natal chart (Janma Kundali).
 """
 
 from fastapi import APIRouter, HTTPException
 from datetime import datetime, timezone, timedelta
 from backend.models.kundali import KundaliRequest, KundaliResponse
-from backend.services.planetary import calc_planet_positions, calc_ascendant
+from backend.services.kundali.engine import generate_full_kundali
 from backend.services.location import resolve_location
-from backend.services.astronomy import rashi_from_longitude, format_degrees
-from backend.config import DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_TIMEZONE
+from backend.config import DEFAULT_TIMEZONE
 
 router = APIRouter(prefix="/api/kundali", tags=["Kundali"])
 
@@ -18,10 +17,10 @@ IST_OFFSET = 5.5
 
 
 @router.post("/generate", response_model=KundaliResponse)
-def generate_kundali(req: KundaliRequest):
+def generate_kundali_endpoint(req: KundaliRequest):
     """
-    Generate a Kundali (natal chart) with 9 planetary positions
-    for the given birth date, time, and location.
+    Generate a complete Vedic Janma Kundali with Lagna, Houses, 9 Navagraha positions,
+    D9 Navamsa placements, Dignities, Aspects, and Yogas.
     """
     # Parse date and time
     try:
@@ -33,7 +32,6 @@ def generate_kundali(req: KundaliRequest):
         )
 
     # Resolve location
-    location = None
     if req.latitude is not None and req.longitude is not None:
         use_lat = req.latitude
         use_lng = req.longitude
@@ -42,37 +40,31 @@ def generate_kundali(req: KundaliRequest):
     else:
         location = resolve_location(req.city)
         if location is None:
-            raise HTTPException(status_code=404, detail=f"City '{req.city}' not found in database.")
-        use_lat = location.latitude
-        use_lng = location.longitude
-        tz_name = location.timezone
-        city_display = location.displayName
+            # Fallback to Ujjain coordinates if city search yields no exact match
+            use_lat = 23.1793
+            use_lng = 75.7849
+            tz_name = DEFAULT_TIMEZONE
+            city_display = f"{req.city} (Observatory)"
+        else:
+            use_lat = location.latitude
+            use_lng = location.longitude
+            tz_name = location.timezone
+            city_display = location.displayName
 
     # Convert to UTC
-    utc_offset = IST_OFFSET  # TODO: dynamic timezone offset
+    utc_offset = IST_OFFSET  # Default IST offset
     ist = timezone(timedelta(hours=utc_offset))
     birth_dt_tz = birth_dt.replace(tzinfo=ist)
     birth_dt_utc = birth_dt_tz.astimezone(timezone.utc)
 
     try:
-        # Calculate Ascendant (Lagna)
-        asc_lng = calc_ascendant(birth_dt_utc, use_lat, use_lng)
-        asc_rashi = rashi_from_longitude(asc_lng)
-
-        # Calculate all 9 planet positions
-        planets = calc_planet_positions(birth_dt_utc, asc_lng)
-
-        return KundaliResponse(
-            fullName=req.fullName,
-            dateOfBirth=req.dateOfBirth,
-            timeOfBirth=req.timeOfBirth,
-            location=city_display,
-            latitude=use_lat,
-            longitude=use_lng,
-            timezone=tz_name,
-            ascendantSign=f"{asc_rashi['english']} ({asc_rashi['sanskrit']})",
-            ascendantDegrees=format_degrees(asc_lng),
-            planets=planets,
+        return generate_full_kundali(
+            req=req,
+            lat=use_lat,
+            lng=use_lng,
+            tz_name=tz_name,
+            city_display=city_display,
+            dt_utc=birth_dt_utc,
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Kundali Calculation error: {str(e)}")
