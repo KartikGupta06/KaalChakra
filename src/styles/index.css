@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Canvas & Surfaces (Light Mode) */
+  --kc-bg-paper: #F4E7C8;
+  --kc-bg-parchment: #E7D1A3;
+  --kc-bg-sand: #E9D8B4;
+  --kc-bg-ivory: #F8F0DD;
+
+  /* Dark Theme Surfaces */
+  --kc-bg-temple-brown: #5C4033;
+  --kc-bg-dark-wood: #3A2414;
+  --kc-bg-burnt-brown: #2B1A10;
+  --kc-bg-charcoal: #20140D;
+
+  /* Accents */
+  --kc-gold-royal: #D4AF37;
+  --kc-brass: #C89B3C;
+  --kc-copper: #B87333;
+  --kc-saffron: #E67E22;
+  --kc-maroon: #7B1E1E;
+  --kc-sindoor: #A52A2A;
+  --kc-lotus: #C97A7E;
+
+  /* Typography */
+  --kc-text-primary: #2F1B14;
+  --kc-text-secondary: #5C4033;
+  --kc-text-muted: #7D6B57;
+  --kc-text-disabled: #A79A87;
+
+  /* Shadows & Glows */
+  --kc-shadow-warm: 0 8px 24px rgba(47, 27, 20, 0.12);
+  --kc-shadow-deep: 0 16px 40px rgba(32, 20, 13, 0.25);
+  --kc-glow-amber: 0 0 15px rgba(212, 175, 55, 0.35);
+  --kc-glow-lamp: 0 0 30px rgba(230, 126, 34, 0.25);
+}
+
+.dark {
+  /* Canvas & Surfaces (Dark Mode) */
+  --kc-bg-paper: #2B1A10;
+  --kc-bg-parchment: #3A2414;
+  --kc-bg-sand: #321E12;
+  --kc-bg-ivory: #452C1A;
+
+  /* Typography */
+  --kc-text-primary: #F4E7C8;
+  --kc-text-secondary: #E7D1A3;
+  --kc-text-muted: #B8A388;
+  --kc-text-disabled: #6E5B4B;
+
+  /* Shadows & Glows */
+  --kc-shadow-warm: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --kc-shadow-deep: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --kc-glow-amber: 0 0 20px rgba(212, 175, 55, 0.5);
+  --kc-glow-lamp: 0 0 35px rgba(230, 126, 34, 0.4);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--kc-bg-parchment);
+  border-left: 1px solid var(--kc-brass);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--kc-brass);
+  border-radius: 2px;
+  border: 1px solid var(--kc-bg-paper);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kc-gold-royal);
+}
+
+/* Custom Manuscript Utilities */
+@layer components {
+  .kc-card-manuscript {
+    background-color: var(--kc-bg-paper);
+    background-image: radial-gradient(circle at center, rgba(248, 240, 221, 0.6) 0%, rgba(244, 231, 200, 0.2) 100%);
+    border: 1px solid var(--kc-brass);
+    box-shadow: var(--kc-shadow-warm);
+    border-radius: 4px;
+    position: relative;
+  }
+
+  .dark .kc-card-manuscript {
+    background-image: radial-gradient(circle at center, rgba(69, 44, 26, 0.6) 0%, rgba(43, 26, 16, 0.4) 100%);
+  }
+
+  .kc-card-manuscript::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border: 1px solid rgba(200, 155, 60, 0.3);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  .kc-heading-gold {
+    font-family: 'Cinzel', 'EB Garamond', serif;
+    color: var(--kc-maroon);
+    border-bottom: 1px solid var(--kc-gold-royal);
+  }
+
+  .dark .kc-heading-gold {
+    color: var(--kc-gold-royal);
+  }
+
+  .kc-glow-amber {
+    box-shadow: var(--kc-glow-amber);
+  }
+
+  .kc-glow-lamp {
+    box-shadow: var(--kc-glow-lamp);
+  }
+}

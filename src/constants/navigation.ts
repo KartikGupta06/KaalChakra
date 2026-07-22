@@ -1,0 +1,68 @@
+import { NavItem } from '../types';
+
+export const NAVIGATION_ITEMS: NavItem[] = [
+  {
+    id: 'home',
+    label: 'Home',
+    sanskritLabel: 'मुख्यपृष्ठम्',
+    path: '/',
+    icon: '📜',
+    description: 'Sacred Gateway & Celestial Overview',
+  },
+  {
+    id: 'kundali',
+    label: 'Kundali',
+    sanskritLabel: 'जन्मकुण्डली',
+    path: '/kundali',
+    icon: '☸',
+    description: 'Vedic Natal Horoscope & Planetary Positions',
+  },
+  {
+    id: 'panchang',
+    label: "Today's Panchang",
+    sanskritLabel: 'पञ्चाङ्गम्',
+    path: '/panchang',
+    icon: '☀',
+    description: 'Five Pillars of Vedic Time Keeping',
+  },
+  {
+    id: 'muhurat',
+    label: 'Muhurat',
+    sanskritLabel: 'शुभमुहूर्तम्',
+    path: '/muhurat',
+    icon: '🪔',
+    description: 'Auspicious Timings & Solar Hours',
+  },
+  {
+    id: 'calendar',
+    label: 'Festival Calendar',
+    sanskritLabel: 'उत्सवपञ्चाङ्गम्',
+    path: '/calendar',
+    icon: '🌺',
+    description: 'Sacred Festivals & Tithi Events',
+  },
+  {
+    id: 'horoscope',
+    label: 'Horoscope',
+    sanskritLabel: 'राशिफलम्',
+    path: '/horoscope',
+    icon: '🌙',
+    description: 'Zodiac Signs & Planetary Transits',
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    sanskritLabel: 'विन्यासः',
+    path: '/settings',
+    icon: '⚙',
+    description: 'Location, Calculation Systems & Audio',
+  },
+  {
+    id: 'about',
+    label: 'About Heritage',
+    sanskritLabel: 'वैदिकपरम्परा',
+    path: '/about',
+    icon: '🕉',
+    description: 'Ancient Astronomical Manuscripts & Museum',
+  },
+];
