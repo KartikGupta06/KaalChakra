@@ -6,7 +6,7 @@ import { BirthChamberPage } from '../pages/BirthChamberPage';
 import { KundaliRevelationPage } from '../pages/KundaliRevelationPage';
 import { CelestialObservatoryPage } from '../pages/CelestialObservatoryPage';
 import { PanchangModulePage } from '../pages/modules/PanchangModulePage';
-import { CalendarModulePage } from '../pages/modules/CalendarModulePage';
+import { TimelineChamberPage } from '../pages/modules/TimelineChamberPage';
 import { MuhuratChamberPage } from '../pages/modules/MuhuratChamberPage';
 import { HoroscopeModulePage } from '../pages/modules/HoroscopeModulePage';
 import { AboutModulePage } from '../pages/modules/AboutModulePage';
@@ -32,7 +32,8 @@ export const AppRoutes: React.FC = () => {
 
         {/* Module Destinations */}
         <Route path="/panchang" element={<PanchangModulePage />} />
-        <Route path="/calendar" element={<CalendarModulePage />} />
+        <Route path="/calendar" element={<TimelineChamberPage />} />
+        <Route path="/timeline" element={<TimelineChamberPage />} />
         <Route path="/muhurat" element={<MuhuratChamberPage />} />
         <Route path="/horoscope" element={<HoroscopeModulePage />} />
         <Route path="/about" element={<AboutModulePage />} />
