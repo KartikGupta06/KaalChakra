@@ -68,6 +68,15 @@ export const SACRED_CHAMBERS: ChamberData[] = [
     description: 'Configure observational location coordinates, Ayanamsha systems (Lahiri/Raman), audio & visuals.',
     badge: 'Chamber VII',
   },
+  {
+    id: 'archive',
+    title: 'Eternal Archive',
+    sanskritTitle: 'सनातन अभिलेखागार',
+    path: '/archive',
+    icon: '🏛',
+    description: 'Sacred temple library for preserving, comparing, searching, and managing saved charts & royal manuscripts.',
+    badge: 'Chamber VIII',
+  },
 ];
 
 export const KnowledgeChambers: React.FC = () => {

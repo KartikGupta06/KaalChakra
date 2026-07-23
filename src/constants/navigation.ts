@@ -50,6 +50,14 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     description: 'Zodiac Signs & Planetary Transits',
   },
   {
+    id: 'archive',
+    label: 'Eternal Archive',
+    sanskritLabel: 'सनातन अभिलेखागार',
+    path: '/archive',
+    icon: '🏛',
+    description: 'Sacred Temple Library of Saved Charts & Manuscripts',
+  },
+  {
     id: 'settings',
     label: 'Settings',
     sanskritLabel: 'विन्यासः',

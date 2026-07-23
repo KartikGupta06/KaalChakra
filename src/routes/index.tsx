@@ -11,6 +11,7 @@ import { MuhuratChamberPage } from '../pages/modules/MuhuratChamberPage';
 import { HoroscopeModulePage } from '../pages/modules/HoroscopeModulePage';
 import { AboutModulePage } from '../pages/modules/AboutModulePage';
 import { SettingsModulePage } from '../pages/modules/SettingsModulePage';
+import { EternalArchivePage } from '../pages/EternalArchivePage';
 import { DesignSystemShowcase } from '../pages/DesignSystemShowcase';
 
 export const AppRoutes: React.FC = () => {
@@ -29,6 +30,9 @@ export const AppRoutes: React.FC = () => {
 
         {/* Phase 9 Celestial Observatory */}
         <Route path="/observatory" element={<CelestialObservatoryPage />} />
+
+        {/* Phase 14 Eternal Archive */}
+        <Route path="/archive" element={<EternalArchivePage />} />
 
         {/* Module Destinations */}
         <Route path="/panchang" element={<PanchangModulePage />} />

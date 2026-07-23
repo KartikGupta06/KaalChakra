@@ -115,10 +115,12 @@ export const KundaliRevelationPage: React.FC = () => {
             {/* Sacred Margin Interpretation Card */}
             <SacredInterpretationPanel birthData={state} />
 
-            {/* Export Actions (Download Royal Manuscript, Share, Print, Replay) */}
+            {/* Export Actions (Download Royal Manuscript, Share, Print, Replay, Preserve in Archive) */}
             <ExportSection
               onReplaySequence={() => setIsPlayingSequence(true)}
               onOpenManuscriptModal={() => setIsManuscriptModalOpen(true)}
+              birthData={state}
+              kundaliData={(state as any).kundaliData}
             />
           </PageContainer>
         </main>

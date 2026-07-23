@@ -12,6 +12,7 @@ from backend.api.location_router import router as location_router
 from backend.api.wisdom_router import router as wisdom_router
 from backend.api.muhurat_router import router as muhurat_router
 from backend.api.timeline_router import router as timeline_router
+from backend.api.archive_router import router as archive_router
 
 app = FastAPI(
     title="Kalachakra — Celestial Computation Engine",
@@ -35,6 +36,7 @@ app.include_router(location_router)
 app.include_router(wisdom_router)
 app.include_router(muhurat_router)
 app.include_router(timeline_router)
+app.include_router(archive_router)
 
 
 @app.get("/")
