@@ -40,8 +40,9 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const safeValue = typeof value === 'string' ? value : '';
   const filtered = HISTORIC_CITIES.filter((loc) =>
-    loc.city.toLowerCase().includes(value.toLowerCase())
+    loc.city.toLowerCase().includes(safeValue.toLowerCase())
   );
 
   const handleSelect = (loc: LocationData) => {

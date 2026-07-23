@@ -24,12 +24,12 @@ export const SACRED_CHAMBERS: ChamberData[] = [
     badge: 'Chamber II',
   },
   {
-    id: 'calendar',
-    title: 'Festival Calendar',
-    sanskritTitle: 'उत्सवपञ्चाङ्गम्',
-    path: '/calendar',
-    icon: 'calendar',
-    description: 'Ancient Vedic festival almanac, lunar tithis, ekadashi dates, and sacred observational observances.',
+    id: 'timeline',
+    title: 'Cosmic Timeline',
+    sanskritTitle: 'काल प्रवाह - अनन्त चक्र',
+    path: '/timeline',
+    icon: 'timeline',
+    description: 'Vimshottari Mahadasha progressions, planetary transits, eclipses, and sacred life milestones.',
     badge: 'Chamber III',
   },
   {

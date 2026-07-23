@@ -18,9 +18,9 @@ export const TimelineChamberPage: React.FC = () => {
   const { playSound } = useSound();
   const { activeKundali, setActiveKundali } = useKundali();
 
-  // Local Editable Form State initialized from activeKundali
+  // Local Editable Form State initialized from activeKundali with safe fallbacks
   const [formData, setFormData] = useState<EditableTimelineFormData>({
-    fullName: activeKundali.fullName || 'Observer',
+    fullName: activeKundali.fullName || 'Vedic Traveler',
     day: activeKundali.date?.day || 15,
     month: activeKundali.date?.month || 8,
     year: activeKundali.date?.year || 1998,
@@ -32,7 +32,8 @@ export const TimelineChamberPage: React.FC = () => {
 
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [timelineData, setTimelineData] = useState<TimelineResponse | null>(null);
-  const [isGenerating, setIsGenerating] = useState<boolean>(true);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
 
   // Modals
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
@@ -43,51 +44,66 @@ export const TimelineChamberPage: React.FC = () => {
     async (data: EditableTimelineFormData, filter: string) => {
       setIsGenerating(true);
 
-      const dobStr = `${data.year}-${data.month < 10 ? '0' + data.month : data.month}-${data.day < 10 ? '0' + data.day : data.day}`;
+      const safeYear = data.year && !isNaN(data.year) ? data.year : 1998;
+      const safeMonth = data.month && !isNaN(data.month) ? data.month : 8;
+      const safeDay = data.day && !isNaN(data.day) ? data.day : 15;
 
-      let h24 = data.hour;
+      const dobStr = `${safeYear}-${safeMonth < 10 ? '0' + safeMonth : safeMonth}-${safeDay < 10 ? '0' + safeDay : safeDay}`;
+
+      let h24 = data.hour || 6;
       if (data.period === 'PM' && h24 < 12) h24 += 12;
       if (data.period === 'AM' && h24 === 12) h24 = 0;
-      const tobStr = `${h24 < 10 ? '0' + h24 : h24}:${data.minute < 10 ? '0' + data.minute : data.minute}`;
+      const tobStr = `${h24 < 10 ? '0' + h24 : h24}:${(data.minute || 0) < 10 ? '0' + (data.minute || 0) : data.minute || 0}`;
 
       const activeLayers =
         filter === 'all'
           ? ['birth', 'dasha', 'transit', 'eclipse', 'muhurat']
           : ['birth', filter];
 
-      const res = await generateCosmicTimeline({
-        fullName: data.fullName,
-        dateOfBirth: dobStr,
-        timeOfBirth: tobStr,
-        city: data.city,
-        latitude: data.lat,
-        longitude: data.lng,
-        activeLayers,
-      });
+      try {
+        const res = await generateCosmicTimeline({
+          fullName: data.fullName || 'Vedic Traveler',
+          dateOfBirth: dobStr,
+          timeOfBirth: tobStr,
+          city: data.city || 'Ujjain',
+          latitude: data.lat,
+          longitude: data.lng,
+          activeLayers,
+        });
 
-      setTimelineData(res);
-      setIsGenerating(false);
+        if (res && res.events) {
+          setTimelineData(res);
+        }
+      } catch (err) {
+        console.error('[Timeline] Failed to generate timeline:', err);
+      } finally {
+        setIsGenerating(false);
+        setIsInitialLoading(false);
+      }
     },
     []
   );
 
-  // Initial Load
+  // Initial Load on mount
   useEffect(() => {
     executeTimelineGeneration(formData, activeFilter);
-  }, []); // Run on mount
+  }, []);
 
+  // Form input changes update ONLY local form state while typing.
+  // Never recalculate timeline on keystroke!
   const handleFormChange = (updated: Partial<EditableTimelineFormData>) => {
     setFormData((prev) => ({ ...prev, ...updated }));
   };
 
+  // Explicit button click triggers timeline regeneration
   const handleRegenerate = async () => {
     playSound('ink-stroke');
-    // Also update KundaliContext with new coordinates
+
     setActiveKundali({
-      fullName: formData.fullName,
-      date: { day: formData.day, month: formData.month, year: formData.year },
-      time: { hour: formData.hour, minute: formData.minute, period: formData.period },
-      place: formData.city,
+      fullName: formData.fullName || 'Vedic Traveler',
+      date: { day: formData.day || 15, month: formData.month || 8, year: formData.year || 1998 },
+      time: { hour: formData.hour || 6, minute: formData.minute || 30, period: formData.period || 'AM' },
+      place: formData.city || 'Ujjain',
     });
 
     await executeTimelineGeneration(formData, activeFilter);
@@ -149,9 +165,9 @@ export const TimelineChamberPage: React.FC = () => {
 
             <AncientDivider symbol="wheel" />
 
-            {/* Cosmic Timeline View */}
+            {/* Cosmic Timeline Stream — Never unmounts while editing */}
             <SectionWrapper className="my-6">
-              {isGenerating ? (
+              {isInitialLoading ? (
                 <div className="p-12 text-center bg-kc-paper dark:bg-kc-burnt-brown border-2 border-kc-brass rounded-xs my-6 shadow-deep">
                   <div className="font-devanagari text-xl font-bold text-kc-gold-royal animate-pulse">
                     ॥ काल प्रवाह संकलनम् ॥
