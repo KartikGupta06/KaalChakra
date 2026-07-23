@@ -25,18 +25,47 @@ export const DEFAULT_PLANETS: GrahaPlacement[] = [
 
 // Coordinate placement helpers for North Indian Diamond Chart (500x500 viewBox)
 const HOUSE_POSITIONS: { [key: number]: { x: number; y: number } } = {
-  1: { x: 250, y: 150 },   // Top Center Diamond (Ascendant / Tanu Bhava)
+  1: { x: 250, y: 145 },   // Top Center Diamond (Ascendant / Tanu Bhava)
   2: { x: 130, y: 70 },    // Top Left Triangle
   3: { x: 70, y: 130 },    // Left Top Triangle
   4: { x: 150, y: 250 },   // Left Center Diamond (Matru Bhava)
   5: { x: 70, y: 370 },    // Left Bottom Triangle
   6: { x: 130, y: 430 },   // Bottom Left Triangle
-  7: { x: 250, y: 350 },   // Bottom Center Diamond (Yuvati Bhava)
+  7: { x: 250, y: 355 },   // Bottom Center Diamond (Yuvati Bhava)
   8: { x: 370, y: 430 },   // Bottom Right Triangle
   9: { x: 430, y: 370 },   // Right Bottom Triangle
   10: { x: 350, y: 250 },  // Right Center Diamond (Karma Bhava)
   11: { x: 430, y: 130 },  // Right Top Triangle
   12: { x: 370, y: 70 },   // Top Right Triangle
+};
+
+/**
+ * Smart stacking & positioning algorithm to prevent planet label overlap in houses
+ */
+const getPlanetCoords = (
+  pIdx: number,
+  totalPlanets: number,
+  baseX: number,
+  baseY: number
+): { x: number; y: number } => {
+  if (totalPlanets === 1) {
+    return { x: baseX, y: baseY + 4 };
+  }
+  if (totalPlanets === 2) {
+    const offsetY = (pIdx - 0.5) * 22;
+    return { x: baseX, y: baseY + 4 + offsetY };
+  }
+  if (totalPlanets === 3) {
+    if (pIdx === 0) return { x: baseX - 26, y: baseY - 6 };
+    if (pIdx === 1) return { x: baseX + 26, y: baseY - 6 };
+    return { x: baseX, y: baseY + 18 };
+  }
+  // 4 or more planets: 2-column grid
+  const col = pIdx % 2;
+  const row = Math.floor(pIdx / 2);
+  const offsetX = (col - 0.5) * 52;
+  const offsetY = (row - 0.5) * 22;
+  return { x: baseX + offsetX, y: baseY + 4 + offsetY };
 };
 
 interface NorthIndianKundaliProps {
@@ -96,14 +125,22 @@ export const NorthIndianKundali: React.FC<NorthIndianKundaliProps> = ({
               const isLagna = h === 1;
               return (
                 <g key={`num-${h}`}>
+                  <rect
+                    x={pos.x - 14}
+                    y={pos.y - 32}
+                    width="28"
+                    height="16"
+                    rx="3"
+                    className="fill-kc-paper/80 dark:fill-kc-burnt-brown/80"
+                  />
                   <text
                     x={pos.x}
-                    y={pos.y - 25}
+                    y={pos.y - 24}
                     textAnchor="middle"
                     dominantBaseline="central"
                     className={cn(
-                      'font-heading text-xs font-bold fill-kc-maroon/70 dark:fill-kc-gold/70',
-                      isLagna && 'fill-kc-maroon dark:fill-kc-gold text-sm font-extrabold'
+                      'font-heading text-xs font-bold fill-kc-maroon/80 dark:fill-kc-gold/80',
+                      isLagna && 'fill-kc-maroon dark:fill-kc-gold text-xs font-black'
                     )}
                   >
                     {isLagna ? 'L-1' : h}
@@ -122,20 +159,30 @@ export const NorthIndianKundali: React.FC<NorthIndianKundaliProps> = ({
               return (
                 <g key={`house-planets-${houseNum}`}>
                   {housePlanets.map((p, pIdx) => {
-                    const offsetY = (pIdx - (housePlanets.length - 1) / 2) * 18;
+                    const coords = getPlanetCoords(pIdx, housePlanets.length, pos.x, pos.y);
                     return (
                       <motion.g
                         key={p.id}
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 * pIdx, duration: 0.5 }}
+                        transition={{ delay: 0.08 * pIdx, duration: 0.4 }}
                       >
+                        {/* High-contrast background pill for visual clarity & zero line overlap */}
+                        <rect
+                          x={coords.x - 24}
+                          y={coords.y - 10}
+                          width="48"
+                          height="20"
+                          rx="4"
+                          className="fill-kc-paper/95 dark:fill-kc-burnt-brown/95 stroke-kc-brass/40 dark:stroke-kc-gold/40"
+                          strokeWidth="0.8"
+                        />
                         <text
-                          x={pos.x}
-                          y={pos.y + offsetY}
+                          x={coords.x}
+                          y={coords.y}
                           textAnchor="middle"
                           dominantBaseline="central"
-                          className="font-devanagari text-xs font-bold fill-kc-maroon dark:fill-kc-gold drop-shadow-xs select-none"
+                          className="font-devanagari text-[11px] font-bold fill-kc-maroon dark:fill-kc-gold drop-shadow-2xs select-none"
                         >
                           {p.sanskrit} {p.symbol}
                         </text>

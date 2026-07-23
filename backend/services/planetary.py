@@ -44,8 +44,9 @@ def calc_planet_positions(dt: datetime, ascendant_lng: float = 0.0) -> List[Plan
         rashi = rashi_from_longitude(sid_lng)
         nak = nakshatra_from_longitude(sid_lng)
 
-        # House calculation (Whole Sign houses from Lagna)
-        house = int(((sid_lng - ascendant_lng) % 360.0) / 30.0) + 1
+        asc_sign_idx = rashi_from_longitude(ascendant_lng)["index"] if ascendant_lng else 1
+        rashi_idx = rashi["index"]
+        house = ((rashi_idx - asc_sign_idx) % 12) + 1
 
         # Retrograde detection (for real planets, not nodes)
         is_retro = False

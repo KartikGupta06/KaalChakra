@@ -34,11 +34,37 @@ export async function fetchWisdomInterpretation(birthData: any): Promise<WisdomR
 }
 
 /**
+ * Extension Point: Prepares structured WisdomResponse payload for future AI Guide transformer.
+ * Architecture: Calculated Kundali -> Wisdom Engine -> AI Guide -> Simple Language Explanation
+ */
+export function transformWisdomForAiGuide(wisdom: WisdomResponse, userQuery?: string) {
+  return {
+    targetObserver: wisdom.fullName,
+    ascendantContext: `${wisdom.ascendant.signName} (${wisdom.ascendant.titleSanskrit})`,
+    dominantElement: wisdom.overview.dominantElement,
+    dominantQuality: wisdom.overview.dominantQuality,
+    themes: wisdom.overview.keyThemes,
+    yogasDetected: wisdom.yogas.map((y) => y.name),
+    userQuery: userQuery || null,
+    readyForAiSynthesis: true,
+  };
+}
+
+/**
  * Generates local fallback WisdomResponse if backend is unavailable.
+ * Dynamically respects calculated Ascendant and Planetary placements from birthData.
  */
 export function buildFallbackWisdom(birthData: any): WisdomResponse {
   const name = birthData?.fullName || birthData?.name || 'Observer';
+  const ascendantSign = birthData?.ascendantSign || birthData?.ascendant?.sign || 'Sagittarius (धनु)';
   const now = new Date().toISOString();
+
+  // Extract Moon & Sun placements if available
+  const moonPlacement = birthData?.planets?.find((p: any) => p.id === 'moon');
+  const sunPlacement = birthData?.planets?.find((p: any) => p.id === 'sun');
+
+  const moonSign = moonPlacement?.sign || 'Leo (सिंह)';
+  const sunSign = sunPlacement?.sign || 'Virgo (कन्या)';
 
   return {
     reportId: `KC-WISDOM-LOCAL-${Date.now().toString(36).toUpperCase()}`,
@@ -46,13 +72,13 @@ export function buildFallbackWisdom(birthData: any): WisdomResponse {
     overview: {
       titleSanskrit: '॥ सर्वांगीण चक्र अवलोकन ॥',
       titleEnglish: 'Overall Chart Summary',
-      summary: `The natal horoscope for ${name} features Simha (Leo) as the Ascendant (Lagna), placing solar leadership, vitality, and purposive expression at the center of life's path.`,
-      dominantElement: 'Agni (Fire)',
-      dominantQuality: 'Sthira (Fixed)',
+      summary: `The natal horoscope for ${name} features ${ascendantSign} as the Ascendant (Lagna), with Janma Rashi (Moon Sign) in ${moonSign} and Surya Rashi (Sun Sign) in ${sunSign}, establishing a harmonious blend of vital direction and intellectual alignment.`,
+      dominantElement: 'Agni (Fire) / Prithvi (Earth)',
+      dominantQuality: 'Dwiswabhava (Dual) / Sthira (Fixed)',
       keyThemes: [
-        'Vitality, Courage, and Executive Purpose',
-        'Intuitive Wisdom & Dharmic Alignment',
-        'Gajakesari & Budhaditya Yoga Combinations',
+        'Purposeful Direction, Vitality & Dharmic Alignment',
+        'Balanced Intellect & Intuitive Mind (Janma Rashi)',
+        'Harmonious Planetary Placement & Yogas',
       ],
       balancedPerspective:
         'Vedic astrology provides a blueprint of cosmic potential. Conscious action (Purushartha) and dharmic awareness guide how these tendencies manifest.',
@@ -60,13 +86,13 @@ export function buildFallbackWisdom(birthData: any): WisdomResponse {
     ascendant: {
       titleSanskrit: '॥ लग्न एवं लग्नेश विचार ॥',
       titleEnglish: 'Ascendant & Rising Sign Interpretation',
-      signName: 'Simha (Leo)',
-      signSanskrit: 'सिंह',
+      signName: ascendantSign,
+      signSanskrit: ascendantSign.includes('(') ? ascendantSign.split('(')[1].replace(')', '') : ascendantSign,
       traits: ['Dignified Leadership', 'Generosity of Spirit', 'Creative Expression', 'Vital Force'],
       description:
-        'Simha (Leo) Lagna establishes an innate drive for self-mastery, dignity, and authentic self-expression. It governs vitality and physical constitution.',
+        `${ascendantSign} Lagna establishes the primary cosmic lens through which physical vitality, character, and outward life direction are expressed under Parasari principles.`,
       lagnaLordMeaning:
-        'Surya (Sun) rules Simha Lagna. Its strength in the 1st House illuminates personal authority and clarity of purpose.',
+        `The primary ruler of ${ascendantSign} acts as the Lagna Lord, illuminating personal authority and clarity of purpose.`,
     },
     planets: [
       {
@@ -74,74 +100,74 @@ export function buildFallbackWisdom(birthData: any): WisdomResponse {
         name: 'Sun',
         sanskrit: 'सूर्य',
         symbol: '☉',
-        sign: 'Simha (सिंह)',
-        house: 1,
-        nakshatra: 'पूर्वाफाल्गुनी (Purva Phalguni)',
-        dignity: 'Swakshetra (Moolatrikona)',
-        signMeaning: 'Sun in its own sign Simha bestows strong willpower, natural dignity, and vitality.',
-        houseMeaning: '1st House placement enhances personal magnetism and leadership capacity.',
-        nakshatraMeaning: 'Purva Phalguni grants creative refinement and appreciation for harmony.',
-        dignityMeaning: 'Operating in Swakshetra dignity, allowing unhindered solar vitality.',
-        overallSummary: 'Surya represents the Soul (Atman). Positioned in Simha (House 1) in Swakshetra dignity.',
+        sign: sunSign,
+        house: sunPlacement?.house || 10,
+        nakshatra: sunPlacement?.nakshatraName || 'Hasta (हस्त)',
+        dignity: sunPlacement?.dignity || 'Swakshetra / Mitrashetra',
+        signMeaning: `Surya (Sun) in ${sunSign} bestows willpower, clear intellect, and organizational capacity.`,
+        houseMeaning: 'Enhances executive authority and clarity of vital purpose.',
+        nakshatraMeaning: 'Grants creative refinement and appreciation for precision.',
+        dignityMeaning: 'Operating with clear solar vitality and purpose.',
+        overallSummary: `Surya represents the Soul (Atman). Positioned in ${sunSign}.`,
       },
       {
         id: 'moon',
         name: 'Moon',
         sanskrit: 'चन्द्र',
         symbol: '☽',
-        sign: 'Vrishabha (वृषभ)',
-        house: 4,
-        nakshatra: 'रोहिणी (Rohini)',
-        dignity: 'Exalted (उच्च)',
-        signMeaning: 'Moon exalted in Vrishabha grants emotional stability, calm reflection, and contentment.',
-        houseMeaning: '4th House placement brings happiness through home, mother, and land.',
-        nakshatraMeaning: 'Rohini Nakshatra enhances aesthetic charm and nurturing capacity.',
-        dignityMeaning: 'Exalted (Ucha) status grants supreme emotional clarity and peace of mind.',
-        overallSummary: 'Chandra represents the Mind (Manas). Positioned in Vrishabha (House 4) in Exalted dignity.',
+        sign: moonSign,
+        house: moonPlacement?.house || 9,
+        nakshatra: moonPlacement?.nakshatraName || 'Purva Phalguni (पूर्वाफाल्गुनी)',
+        dignity: moonPlacement?.dignity || 'Utcha / Mitrashetra',
+        signMeaning: `Chandra (Moon) in ${moonSign} (Janma Rashi) grants emotional warmth, creative mind, and mental fortitude.`,
+        houseMeaning: 'Brings emotional peace and happiness through philosophical alignment.',
+        nakshatraMeaning: 'Enhances aesthetic charm, artistic instinct, and nurturing capacity.',
+        dignityMeaning: 'Grants emotional clarity and stability.',
+        overallSummary: `Chandra represents the Mind (Manas). Positioned in ${moonSign}.`,
       },
       {
         id: 'jupiter',
         name: 'Jupiter',
         sanskrit: 'गुरु',
         symbol: '♃',
-        sign: 'Dhanu (धनु)',
-        house: 9,
-        nakshatra: 'पूर्वाषाढा (Purva Ashadha)',
+        sign: 'Pisces (मीन)',
+        house: 4,
+        nakshatra: 'Purva Bhadrapada',
         dignity: 'Swakshetra (स्वक्षेत्र)',
-        signMeaning: 'Jupiter in own sign Dhanu confers deep devotion to dharma, philosophy, and higher learning.',
-        houseMeaning: '9th House placement expands spiritual wisdom, luck, and guidance from preceptors.',
-        nakshatraMeaning: 'Purva Ashadha bestows invincible determination and pursuit of truth.',
-        dignityMeaning: 'Swakshetra dignity ensures pure expression of wisdom and benefic grace.',
-        overallSummary: 'Guru represents divine wisdom. Positioned in Dhanu (House 9) in Swakshetra dignity.',
+        signMeaning: 'Jupiter in own sign Pisces confers deep devotion to dharma, philosophy, and higher learning.',
+        houseMeaning: '4th House placement expands inner contentment and spiritual wisdom.',
+        nakshatraMeaning: 'Purva Bhadrapada bestows determination and pursuit of truth.',
+        dignityMeaning: 'Swakshetra dignity ensures pure expression of wisdom.',
+        overallSummary: 'Guru represents divine wisdom and preceptor grace.',
       },
     ],
     houses: [
       {
         houseNumber: 1,
         name: 'Tanu Bhava (तनू भाव) • Self & Body',
-        rashi: 'Simha (सिंह)',
-        lord: 'Surya (Sun)',
-        occupants: ['Surya ☉', 'Budha ☿'],
+        rashi: ascendantSign,
+        lord: 'Lagna Lord',
+        occupants: ['Lagna Cusp'],
         significance: 'Governs physical vitality, appearance, character, and primary life direction.',
-        interpretation: '1st House in Simha with Sun and Mercury creates Budhaditya Yoga, conferring sharp intellect and magnetic presence.',
+        interpretation: `1st House in ${ascendantSign} establishes physical constitution, self-awareness, and natural leadership.`,
       },
       {
         houseNumber: 4,
         name: 'Matru Bhava (मातृ भाव) • Home & Peace',
-        rashi: 'Vrishchika (वृश्चिक)',
-        lord: 'Mangala (Mars)',
-        occupants: ['Chandra ☽'],
-        significance: 'Governs emotional peace, mother, landed property, vehicles, and inner contentment.',
-        interpretation: '4th House with Exalted Moon grants profound emotional stability and deep contentment.',
+        rashi: 'Pisces (मीन)',
+        lord: 'Guru (Jupiter)',
+        occupants: ['Guru ♃'],
+        significance: 'Governs emotional peace, mother, landed property, and inner contentment.',
+        interpretation: '4th House with Swakshetra Jupiter grants profound emotional peace and inner harmony.',
       },
       {
         houseNumber: 9,
         name: 'Dharma Bhava (धर्म भाव) • Wisdom & Fortune',
-        rashi: 'Dhanu (धनु)',
-        lord: 'Guru (Jupiter)',
-        occupants: ['Guru ♃'],
+        rashi: moonSign,
+        lord: 'Chandra / Guru',
+        occupants: ['Chandra ☽'],
         significance: 'Governs spiritual dharma, fortune, father, gurus, and higher philosophical knowledge.',
-        interpretation: '9th House in Dhanu with Swakshetra Jupiter grants divine protection and dharmic wisdom.',
+        interpretation: `9th House alignment with Janma Rashi (${moonSign}) grants dharmic wisdom and spiritual protection.`,
       },
     ],
     yogas: [
@@ -160,19 +186,19 @@ export function buildFallbackWisdom(birthData: any): WisdomResponse {
         name: 'Budhaditya Yoga',
         sanskritName: 'बुधादित्य योग',
         significance: 'Sun and Mercury conjunction bestows high intellect and diplomatic skill.',
-        whyDetected: 'Sun and Mercury conjunct in the 1st House within tight orbital orb.',
+        whyDetected: 'Sun and Mercury conjunct with tight orbital orb.',
         contributingPlanets: ['Surya (Sun)', 'Budha (Mercury)'],
         interpretation: 'Grants analytical sharpness, eloquent speech, leadership, and professional success.',
         strength: 'High',
       },
     ],
     panchang: {
-      tithiMeaning: 'Tithi Krishna Ashtami reflects inward spiritual strength and mental fortitude.',
-      nakshatraMeaning: 'Rohini Nakshatra endows the mind with creativity, peace, and appreciation for beauty.',
-      yogaMeaning: 'Harshana Yoga brings joyfulness, vitality, and pleasant dispositions.',
-      karanaMeaning: 'Kaulava Karana enhances execution capacity and social harmony.',
-      vaaraMeaning: 'Ravivaara (Sunday) bestows solar vitality and strong sense of purpose.',
-      overallAtmosphere: 'Auspicious celestial alignment combining solar vitality with exalted lunar serenity.',
+      tithiMeaning: 'Tithi Ashtami reflects inward spiritual strength and mental fortitude.',
+      nakshatraMeaning: 'Nakshatra placement endows the mind with creativity and appreciation for truth.',
+      yogaMeaning: 'Nitya Yoga brings joyfulness, vitality, and pleasant dispositions.',
+      karanaMeaning: 'Karana placement enhances execution capacity and social harmony.',
+      vaaraMeaning: 'Vaara governor bestows vital solar energy and sense of purpose.',
+      overallAtmosphere: 'Auspicious celestial alignment combining solar vitality with serene lunar alignment.',
     },
     metadata: {
       ayanamsha: 'Lahiri (Chitrapaksha)',

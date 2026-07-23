@@ -189,14 +189,18 @@ export function buildRoyalManuscriptData(rawState: any): RoyalManuscriptData {
       reportId,
     },
     lagna: {
-      sign: 'Simha (Leo)',
-      signSanskrit: 'सिंह',
-      degree: '12° 44\' 18"',
-      nakshatra: 'Magha (मघा)',
-      pada: 4,
-      rashiLord: 'Surya (Sun)',
-      element: 'Agni (Fire)',
-      quality: 'Sthira (Fixed)',
+      sign: rawState?.ascendantSign || rawState?.ascendant?.sign || 'Sagittarius (धनु)',
+      signSanskrit: (rawState?.ascendantSign || rawState?.ascendant?.sign || 'Sagittarius (धनु)').includes('(')
+        ? (rawState?.ascendantSign || rawState?.ascendant?.sign || '').split('(')[1]?.replace(')', '') || 'धनु'
+        : 'धनु',
+      degree: rawState?.ascendantDegrees || rawState?.ascendant?.degrees || '9° 46\' 12"',
+      nakshatra: rawState?.ascendant?.nakshatraSanskrit
+        ? `${rawState.ascendant.nakshatraSanskrit} (${rawState.ascendant.nakshatraName})`
+        : 'Mula (मूल)',
+      pada: rawState?.ascendant?.pada || 1,
+      rashiLord: 'Lagna Lord',
+      element: 'Agni (Fire) / Dwiswabhava',
+      quality: 'Dwiswabhava (Dual)',
     },
     planets: planetList,
     grahaPlacements,

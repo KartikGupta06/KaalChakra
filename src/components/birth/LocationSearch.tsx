@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSound } from '../../context/AudioContext';
 import { cn } from '../../lib/utils';
 
@@ -36,6 +36,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
 }) => {
   const { playSound } = useSound();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const filtered = HISTORIC_CITIES.filter((loc) =>
     loc.city.toLowerCase().includes(value.toLowerCase())
@@ -47,11 +48,21 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <div className={cn('relative flex flex-col gap-1.5 w-full', className)}>
-      <label className="font-heading text-xs font-semibold tracking-wider text-kc-maroon dark:text-kc-gold uppercase flex items-center justify-between">
+    <div ref={containerRef} className={cn('relative flex flex-col gap-1.5 w-full', className)}>
+      <label className="font-heading text-xs font-bold tracking-wider text-kc-maroon dark:text-kc-gold uppercase flex items-center justify-between">
         <span>Birth Place (जन्म स्थान)</span>
-        <span className="text-[10px] text-kc-gold-royal lowercase italic">coordinates & longitude</span>
+        <span className="text-[10px] text-kc-gold-royal lowercase italic font-serif">coordinates & longitude</span>
       </label>
 
       <div className="relative">
@@ -62,20 +73,21 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
             onChange(e.target.value);
             setIsOpen(true);
           }}
-          onFocus={() => {
+          onFocus={(e) => {
             playSound('ink-stroke');
+            e.target.select();
             setIsOpen(true);
           }}
-          placeholder="e.g. Ujjain, Varanasi, New Delhi..."
-          className="w-full rounded-xs bg-kc-sand/50 dark:bg-kc-dark-wood/60 px-4 py-2.5 font-serif text-sm text-kc-text-primary dark:text-kc-text-secondary border border-kc-brass/50 dark:border-kc-gold/30 shadow-inset focus:border-kc-gold-royal focus:outline-none placeholder:text-kc-text-disabled"
+          placeholder="e.g. Ujjain, Varanasi, Mumbai..."
+          className="w-full rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-4 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset transition-all duration-200 placeholder:text-kc-text-muted/70 focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood shadow-warm"
         />
-        <span className="absolute right-3 top-2.5 text-kc-text-muted">📌</span>
+        <span className="absolute right-3 top-2.5 text-kc-brass dark:text-kc-gold pointer-events-none">📌</span>
       </div>
 
       {/* Historic Vedic Suggestions Dropdown */}
       {isOpen && filtered.length > 0 && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-48 overflow-y-auto rounded-xs bg-kc-paper dark:bg-kc-burnt-brown border-2 border-kc-brass/80 shadow-deep divide-y divide-kc-brass/20">
-          <div className="px-3 py-1.5 font-heading text-[10px] uppercase tracking-widest text-kc-brass dark:text-kc-gold bg-kc-sand/30">
+        <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-48 overflow-y-auto rounded-xs bg-kc-paper dark:bg-kc-burnt-brown border-2 border-kc-brass shadow-deep divide-y divide-kc-brass/20">
+          <div className="px-3 py-1.5 font-heading text-[10px] uppercase tracking-widest text-kc-maroon dark:text-kc-gold bg-kc-sand/40 font-bold">
             Sacred Observatory Locations
           </div>
           {filtered.map((loc) => (
@@ -83,10 +95,10 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
               key={loc.city}
               type="button"
               onClick={() => handleSelect(loc)}
-              className="w-full px-3 py-2 text-left font-serif text-xs text-kc-text-primary dark:text-kc-text-secondary hover:bg-kc-sand dark:hover:bg-kc-dark-wood flex items-center justify-between cursor-pointer"
+              className="w-full px-3 py-2 text-left font-serif text-xs text-[#1C0F0A] dark:text-[#FDF6E3] hover:bg-kc-sand dark:hover:bg-kc-dark-wood flex items-center justify-between cursor-pointer transition-colors"
             >
-              <span className="font-medium">{loc.city}</span>
-              <span className="text-[10px] text-kc-text-muted">
+              <span className="font-semibold">{loc.city}</span>
+              <span className="text-[10px] text-kc-text-muted italic">
                 {loc.lat}° N, {loc.lng}° E
               </span>
             </button>

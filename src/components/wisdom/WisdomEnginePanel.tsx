@@ -422,6 +422,15 @@ export const WisdomEnginePanel: React.FC<WisdomEnginePanelProps> = ({
           )}
         </div>
 
+        {/* AI Guide Extension Point (Future Architectural Extension Slot: Calculated Kundali -> Wisdom Engine -> AI Guide -> Simple Language Explanation) */}
+        <div className="mt-6 p-3 bg-kc-sand/30 dark:bg-kc-dark-wood/40 border border-dashed border-kc-brass/50 rounded-xs flex items-center justify-between text-xs font-serif text-kc-text-muted">
+          <div className="flex items-center gap-2">
+            <span className="text-kc-gold font-bold">✧ AI GUIDE EXTENSION POINT</span>
+            <span className="hidden sm:inline">• Context Pipeline Ready (Calculated Kundali → Wisdom Engine → AI Guide)</span>
+          </div>
+          <span className="text-[10px] font-heading uppercase text-kc-brass tracking-wider">Modular Expansion Prepared</span>
+        </div>
+
         {/* Transparency & Disclaimer Banner */}
         <div className="mt-6 pt-4 border-t border-kc-brass/40 flex flex-col sm:flex-row items-start sm:items-center justify-between text-[11px] text-kc-text-muted gap-3">
           <div>

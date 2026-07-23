@@ -26,6 +26,7 @@ export const KundaliRevelationPage: React.FC = () => {
     date?: { day: number; month: number; year: number };
     time?: { hour: number; minute: number; period: string };
     place?: string;
+    ascendantSign?: string;
     planets?: any[];
   }) || {};
 
@@ -33,6 +34,12 @@ export const KundaliRevelationPage: React.FC = () => {
   const place = state.place || 'Ujjain (उज्जैन)';
   const dateStr = state.date ? `${state.date.day}/${state.date.month}/${state.date.year}` : '15/8/1998';
   const timeStr = state.time ? `${state.time.hour}:${state.time.minute < 10 ? '0' + state.time.minute : state.time.minute} ${state.time.period}` : '6:30 AM';
+
+  const ascendantSign = state.ascendantSign || 'Sagittarius (धनु)';
+  const moonPlacement = state.planets?.find((p: any) => p.id === 'moon');
+  const sunPlacement = state.planets?.find((p: any) => p.id === 'sun');
+  const moonSign = moonPlacement?.sign || 'Leo (सिंह)';
+  const sunSign = sunPlacement?.sign || 'Virgo (कन्या)';
 
   const [isPlayingSequence, setIsPlayingSequence] = useState<boolean>(true);
   const [isManuscriptModalOpen, setIsManuscriptModalOpen] = useState<boolean>(false);
@@ -90,6 +97,9 @@ export const KundaliRevelationPage: React.FC = () => {
                     dateStr={dateStr}
                     timeStr={timeStr}
                     placeStr={place}
+                    ascendantSign={ascendantSign}
+                    moonSign={moonSign}
+                    sunSign={sunSign}
                   />
                   <div className="mt-4 flex justify-center">
                     <TempleButton variant="secondary" size="sm" onClick={() => navigate('/kundali')}>

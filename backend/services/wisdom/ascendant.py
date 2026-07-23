@@ -24,9 +24,18 @@ LAGNA_TRAITS_MAP = {
 }
 
 LAGNA_LORD_MAP = {
-    1: "Surya (Sun)", 2: "Budha (Mercury)", 3: "Shukra (Venus)", 4: "Chandra (Moon)",
-    5: "Guru (Jupiter)", 6: "Shani (Saturn)", 7: "Shani (Saturn)", 8: "Guru (Jupiter)",
-    9: "Mangala (Mars)", 10: "Shukra (Venus)", 11: "Budha (Mercury)", 12: "Chandra (Moon)"
+    1: "Mangala (Mars)",
+    2: "Shukra (Venus)",
+    3: "Budha (Mercury)",
+    4: "Chandra (Moon)",
+    5: "Surya (Sun)",
+    6: "Budha (Mercury)",
+    7: "Shukra (Venus)",
+    8: "Mangala (Mars)",
+    9: "Guru (Jupiter)",
+    10: "Shani (Saturn)",
+    11: "Shani (Saturn)",
+    12: "Guru (Jupiter)",
 }
 
 
