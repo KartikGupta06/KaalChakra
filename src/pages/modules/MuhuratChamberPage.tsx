@@ -18,6 +18,7 @@ import { MuhuratTimelineView } from '../../components/muhurat/MuhuratTimelineVie
 import { MuhuratDetailModal } from '../../components/muhurat/MuhuratDetailModal';
 import { MuhuratCompareModal } from '../../components/muhurat/MuhuratCompareModal';
 import { RoyalManuscriptModal } from '../../components/manuscript/RoyalManuscriptModal';
+import { getMuhuratIcon } from '../../components/icons/SacredIcons';
 
 export const MuhuratChamberPage: React.FC = () => {
   const { playSound } = useSound();
@@ -164,7 +165,7 @@ export const MuhuratChamberPage: React.FC = () => {
                           : 'bg-kc-ivory dark:bg-kc-dark-wood border-kc-brass/40 text-kc-text-secondary hover:border-kc-brass'
                       }`}
                     >
-                      <span className="text-2xl mb-1">{ev.icon}</span>
+                      <span className="mb-1.5">{getMuhuratIcon(ev.icon, 24)}</span>
                       <span className="font-devanagari text-xs leading-tight font-semibold">
                         {ev.sanskritName}
                       </span>

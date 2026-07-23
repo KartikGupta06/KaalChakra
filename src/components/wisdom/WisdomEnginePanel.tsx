@@ -4,6 +4,7 @@ import { fetchWisdomInterpretation, buildFallbackWisdom } from '../../services/w
 import { TempleBorder } from '../decorations/TempleBorder';
 import { useSound } from '../../context/AudioContext';
 import { useKundali } from '../../context/KundaliContext';
+import { SearchLensIcon } from '../icons/SacredIcons';
 
 interface WisdomEnginePanelProps {
   birthData?: any;
@@ -118,11 +119,14 @@ export const WisdomEnginePanel: React.FC<WisdomEnginePanelProps> = ({
           <div className="relative w-full sm:w-72">
             <input
               type="text"
-              placeholder="🔍 Search planets, houses, yogas..."
+              placeholder="Search planets, houses, yogas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="kc-input w-full pl-3 pr-8 py-1.5 font-serif text-xs"
+              className="kc-input w-full pl-8 pr-8 py-1.5 font-serif text-xs"
             />
+            <span className="absolute left-2.5 top-2 text-kc-text-muted">
+              <SearchLensIcon size={14} />
+            </span>
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}

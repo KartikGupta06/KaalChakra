@@ -2,6 +2,7 @@ import React from 'react';
 import { FilterOptions, ArchiveCategory } from '../../types/archive';
 import { SectionHeading, TempleLabel } from '../typography/Typography';
 import { useLocalization } from '../../context/LocalizationContext';
+import { SearchLensIcon, ExportScrollIcon } from '../icons/SacredIcons';
 
 interface TempleLibraryHeaderProps {
   filterOptions: FilterOptions;
@@ -72,7 +73,7 @@ export const TempleLibraryHeader: React.FC<TempleLibraryHeaderProps> = ({
             className="px-3.5 py-2 rounded-xl text-xs font-heading font-semibold bg-kc-sand/60 dark:bg-kc-dark-wood text-kc-maroon dark:text-kc-gold border border-kc-brass/40 hover:bg-kc-sand transition-colors shadow cursor-pointer flex items-center gap-1.5"
             title="Download JSON Export"
           >
-            <span>📥</span> {t('export_archive', 'Export JSON')}
+            <ExportScrollIcon size={16} /> {t('export_archive', 'Export JSON')}
           </button>
         </div>
       </div>
@@ -88,7 +89,9 @@ export const TempleLibraryHeader: React.FC<TempleLibraryHeaderProps> = ({
             placeholder={t('search_placeholder', 'Search by name, location, Nakshatra, Rashi, tags...')}
             className="kc-input w-full pl-10 pr-4 py-2.5 font-serif text-sm shadow-sm"
           />
-          <span className="absolute left-3.5 top-3 text-kc-text-muted">🔍</span>
+          <span className="absolute left-3.5 top-3.5 text-kc-text-muted">
+            <SearchLensIcon size={16} />
+          </span>
         </div>
 
         {/* Sorting & Favorites Toggle */}

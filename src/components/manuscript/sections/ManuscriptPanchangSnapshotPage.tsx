@@ -1,6 +1,7 @@
 import React from 'react';
 import { RoyalManuscriptData } from '../../../types/manuscript';
 import { ManuscriptPageWrapper } from './ManuscriptPageWrapper';
+import { TithiIcon, NakshatraIcon, YogaIcon, KaranaIcon, SunriseIcon, SunsetIcon } from '../../panchang/PanchangIcons';
 
 interface ManuscriptPanchangSnapshotPageProps {
   data: RoyalManuscriptData;
@@ -10,16 +11,16 @@ export const ManuscriptPanchangSnapshotPage: React.FC<ManuscriptPanchangSnapshot
   const { panchang } = data;
 
   const panchangItems = [
-    { label: 'Tithi (तिथि)', value: panchang.tithi, icon: '🌙', desc: 'Lunar Day & Phase Elongation' },
-    { label: 'Nakshatra (नक्षत्र)', value: panchang.nakshatra, icon: '⭐', desc: 'Stellar Mansion at Birth Moment' },
-    { label: 'Yoga (नित्य योग)', value: panchang.yoga, icon: '☸', desc: 'Solar-Lunar Angular Harmony' },
-    { label: 'Karana (करण)', value: panchang.karana, icon: '📜', desc: 'Half-Tithi Action Governor' },
-    { label: 'Paksha (पक्ष)', value: panchang.paksha, icon: '🌗', desc: 'Lunar Fortnight Phase' },
-    { label: 'Vaara (वार)', value: panchang.vaara, icon: '☀', desc: 'Solar Weekday Lord' },
-    { label: 'Sunrise Time (सूर्योदय)', value: panchang.sunrise, icon: '🌅', desc: 'Local Horizon Solar Rise' },
-    { label: 'Sunset Time (सूर्यास्त)', value: panchang.sunset, icon: '🌇', desc: 'Local Horizon Solar Setting' },
-    { label: 'Moon Illumination', value: panchang.moonPhase, icon: '🌕', desc: 'Visual Lunar Illumination' },
-    { label: 'Vikram Samvat', value: panchang.samvat, icon: '🏛', desc: 'Vedic Calendar Year Era' },
+    { label: 'Tithi (तिथि)', value: panchang.tithi, icon: <TithiIcon size={20} className="text-kc-gold" />, desc: 'Lunar Day & Phase Elongation' },
+    { label: 'Nakshatra (नक्षत्र)', value: panchang.nakshatra, icon: <NakshatraIcon size={20} className="text-kc-gold" />, desc: 'Stellar Mansion at Birth Moment' },
+    { label: 'Yoga (नित्य योग)', value: panchang.yoga, icon: <YogaIcon size={20} className="text-kc-gold" />, desc: 'Solar-Lunar Angular Harmony' },
+    { label: 'Karana (करण)', value: panchang.karana, icon: <KaranaIcon size={20} className="text-kc-gold" />, desc: 'Half-Tithi Action Governor' },
+    { label: 'Paksha (पक्ष)', value: panchang.paksha, icon: <TithiIcon size={20} className="text-kc-gold" />, desc: 'Lunar Fortnight Phase' },
+    { label: 'Vaara (वार)', value: panchang.vaara, icon: <SunriseIcon size={20} className="text-kc-gold" />, desc: 'Solar Weekday Lord' },
+    { label: 'Sunrise Time (सूर्योदय)', value: panchang.sunrise, icon: <SunriseIcon size={20} className="text-kc-gold" />, desc: 'Local Horizon Solar Rise' },
+    { label: 'Sunset Time (सूर्यास्त)', value: panchang.sunset, icon: <SunsetIcon size={20} className="text-kc-gold" />, desc: 'Local Horizon Solar Setting' },
+    { label: 'Moon Illumination', value: panchang.moonPhase, icon: <TithiIcon size={20} className="text-kc-gold" />, desc: 'Visual Lunar Illumination' },
+    { label: 'Vikram Samvat', value: panchang.samvat, icon: <KaranaIcon size={20} className="text-kc-gold" />, desc: 'Vedic Calendar Year Era' },
   ];
 
   return (
