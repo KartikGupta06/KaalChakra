@@ -1,6 +1,7 @@
 import React from 'react';
 import { TempleButton } from '../ui/TempleButton';
 import { useSound } from '../../context/AudioContext';
+import { CalendarScrollIcon } from './PanchangIcons';
 
 interface PanchangNavigationProps {
   onPrevDay: () => void;
@@ -27,7 +28,10 @@ export const PanchangNavigation: React.FC<PanchangNavigationProps> = ({
         size="sm"
         onClick={() => handleAction(onPrevDay)}
       >
-        📜 ← Previous Day (पूर्व दिवस)
+        <span className="flex items-center gap-1.5">
+          <CalendarScrollIcon size={14} />
+          <span>← Previous Day (पूर्व दिवस)</span>
+        </span>
       </TempleButton>
 
       <TempleButton
@@ -35,7 +39,9 @@ export const PanchangNavigation: React.FC<PanchangNavigationProps> = ({
         size="sm"
         onClick={() => handleAction(onToday)}
       >
-        ☸ Today (अद्य)
+        <span className="flex items-center gap-1.5">
+          <span>Today (अद्य)</span>
+        </span>
       </TempleButton>
 
       <TempleButton
@@ -43,7 +49,10 @@ export const PanchangNavigation: React.FC<PanchangNavigationProps> = ({
         size="sm"
         onClick={() => handleAction(onNextDay)}
       >
-        Next Day (उत्तर दिवस) → 📜
+        <span className="flex items-center gap-1.5">
+          <span>Next Day (उत्तर दिवस) →</span>
+          <CalendarScrollIcon size={14} />
+        </span>
       </TempleButton>
     </div>
   );

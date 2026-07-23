@@ -29,12 +29,33 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T | null
   }
 }
 
+export interface PanchangLocationQuery {
+  city?: string;
+  lat?: number;
+  lng?: number;
+}
+
+function buildLocationQuery(loc?: PanchangLocationQuery | string): string {
+  if (!loc) return 'city=Ujjain';
+  if (typeof loc === 'string') return `city=${encodeURIComponent(loc)}`;
+  const params: string[] = [];
+  if (loc.lat != null && loc.lng != null) {
+    params.push(`lat=${loc.lat}&lng=${loc.lng}`);
+  }
+  if (loc.city) {
+    params.push(`city=${encodeURIComponent(loc.city)}`);
+  }
+  return params.length > 0 ? params.join('&') : 'city=Ujjain';
+}
+
 /**
  * Fetch today's Panchang data from the backend.
- * Falls back to null if the backend is unavailable.
  */
-export async function fetchTodayPanchang(city: string = 'Ujjain'): Promise<PanchangData | null> {
-  return apiFetch<PanchangData>(`/panchang/today?city=${encodeURIComponent(city)}`);
+export async function fetchTodayPanchang(
+  location?: PanchangLocationQuery | string
+): Promise<PanchangData | null> {
+  const query = buildLocationQuery(location);
+  return apiFetch<PanchangData>(`/panchang/today?${query}`);
 }
 
 /**
@@ -42,11 +63,10 @@ export async function fetchTodayPanchang(city: string = 'Ujjain'): Promise<Panch
  */
 export async function fetchPanchangForDate(
   date: string,
-  city: string = 'Ujjain'
+  location?: PanchangLocationQuery | string
 ): Promise<PanchangData | null> {
-  return apiFetch<PanchangData>(
-    `/panchang/date?date=${encodeURIComponent(date)}&city=${encodeURIComponent(city)}`
-  );
+  const query = buildLocationQuery(location);
+  return apiFetch<PanchangData>(`/panchang/date?date=${encodeURIComponent(date)}&${query}`);
 }
 
 /**

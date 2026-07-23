@@ -4,6 +4,16 @@ import { PanchangData } from '../../types/panchang';
 import { SectionHeading, TempleLabel } from '../typography/Typography';
 import { sectionReveal, cardLift } from '../animations/variants';
 import { useSound } from '../../context/AudioContext';
+import {
+  SunriseIcon,
+  SunsetIcon,
+  MoonriseIcon,
+  MoonsetIcon,
+  TithiIcon,
+  NakshatraIcon,
+  YogaIcon,
+  KaranaIcon,
+} from './PanchangIcons';
 
 interface SacredEightPanelsProps {
   data: PanchangData;
@@ -15,7 +25,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
   const panels = [
     {
       id: 'sunrise',
-      icon: '☀',
+      icon: <SunriseIcon size={20} className="text-kc-saffron dark:text-kc-gold" />,
       title: 'Sunrise',
       sanskrit: 'सूर्योदय',
       value: data.cycles.sunrise,
@@ -24,7 +34,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'sunset',
-      icon: '🌅',
+      icon: <SunsetIcon size={20} className="text-kc-sindoor dark:text-kc-gold" />,
       title: 'Sunset',
       sanskrit: 'सूर्यास्त',
       value: data.cycles.sunset,
@@ -33,7 +43,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'moonrise',
-      icon: '🌙',
+      icon: <MoonriseIcon size={20} className="text-kc-gold dark:text-kc-gold" />,
       title: 'Moonrise',
       sanskrit: 'चन्द्रोदय',
       value: data.cycles.moonrise,
@@ -42,7 +52,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'moonset',
-      icon: '🌘',
+      icon: <MoonsetIcon size={20} className="text-kc-text-secondary dark:text-kc-gold" />,
       title: 'Moonset',
       sanskrit: 'चन्द्रास्त',
       value: data.cycles.moonset,
@@ -51,7 +61,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'tithi',
-      icon: '🕉',
+      icon: <TithiIcon size={20} className="text-kc-maroon dark:text-kc-gold" />,
       title: 'Tithi',
       sanskrit: 'तिथि',
       value: data.tithi.value,
@@ -61,7 +71,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'nakshatra',
-      icon: '⭐',
+      icon: <NakshatraIcon size={20} className="text-kc-gold-royal dark:text-kc-gold" />,
       title: 'Nakshatra',
       sanskrit: 'नक्षत्र',
       value: data.nakshatra.value,
@@ -71,7 +81,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'yoga',
-      icon: '📜',
+      icon: <YogaIcon size={20} className="text-kc-brass dark:text-kc-gold" />,
       title: 'Yoga',
       sanskrit: 'योग',
       value: data.yoga.value,
@@ -81,7 +91,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
     },
     {
       id: 'karana',
-      icon: '🪔',
+      icon: <KaranaIcon size={20} className="text-kc-copper dark:text-kc-gold" />,
       title: 'Karana',
       sanskrit: 'करण',
       value: data.karana.value,
@@ -124,7 +134,7 @@ export const SacredEightPanels: React.FC<SacredEightPanelsProps> = ({ data }) =>
             {/* Panel Header */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-2xl p-1.5 rounded-xs bg-kc-sand/50 dark:bg-kc-dark-wood text-kc-maroon dark:text-kc-gold border border-kc-brass/30">
+                <span className="p-2 rounded-xs bg-kc-sand/50 dark:bg-kc-dark-wood text-kc-maroon dark:text-kc-gold border border-kc-brass/30 flex items-center justify-center">
                   {p.icon}
                 </span>
                 <span className="font-devanagari text-xs font-semibold text-kc-gold-royal dark:text-kc-saffron">
