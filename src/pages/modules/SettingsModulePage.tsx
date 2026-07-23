@@ -100,7 +100,7 @@ export const SettingsModulePage: React.FC = () => {
                 <select
                   value={language}
                   onChange={(e) => handleLanguageChange(e.target.value as Language)}
-                  className="w-full p-2.5 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl text-xs font-sans text-kc-text-primary dark:text-kc-ivory focus:outline-none"
+                  className="kc-select w-full p-2.5 text-xs"
                 >
                   <option value="en">English (English Terminology)</option>
                   <option value="hi">हिंदी (Hindi Translation)</option>
@@ -119,7 +119,7 @@ export const SettingsModulePage: React.FC = () => {
                 <select
                   value={settings.dateFormat}
                   onChange={(e) => updateSettings({ dateFormat: e.target.value as DateFormat })}
-                  className="w-full p-2.5 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl text-xs font-sans text-kc-text-primary dark:text-kc-ivory focus:outline-none"
+                  className="kc-select w-full p-2.5 text-xs"
                 >
                   <option value="DD/MM/YYYY">DD/MM/YYYY (e.g. 15/08/1998)</option>
                   <option value="YYYY-MM-DD">YYYY-MM-DD (ISO standard)</option>
@@ -136,7 +136,7 @@ export const SettingsModulePage: React.FC = () => {
                 <select
                   value={settings.timeFormat}
                   onChange={(e) => updateSettings({ timeFormat: e.target.value as TimeFormat })}
-                  className="w-full p-2.5 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl text-xs font-sans text-kc-text-primary dark:text-kc-ivory focus:outline-none"
+                  className="kc-select w-full p-2.5 text-xs"
                 >
                   <option value="12h">12-Hour AM/PM (e.g. 06:30 AM)</option>
                   <option value="24h">24-Hour Railway Time (e.g. 18:30)</option>
@@ -162,7 +162,7 @@ export const SettingsModulePage: React.FC = () => {
                 <select
                   value={settings.ayanamsha}
                   onChange={(e) => updateSettings({ ayanamsha: e.target.value as AyanamshaSystem })}
-                  className="w-full p-2.5 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl text-xs font-sans text-kc-text-primary dark:text-kc-ivory focus:outline-none"
+                  className="kc-select w-full p-2.5 text-xs"
                 >
                   <option value="lahiri">Lahiri / Chitrapaksha (Traditional Standard)</option>
                   <option value="raman">B.V. Raman Ayanamsha</option>
@@ -181,7 +181,7 @@ export const SettingsModulePage: React.FC = () => {
                 <select
                   value={settings.houseSystem}
                   onChange={(e) => updateSettings({ houseSystem: e.target.value as HouseSystem })}
-                  className="w-full p-2.5 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl text-xs font-sans text-kc-text-primary dark:text-kc-ivory focus:outline-none"
+                  className="kc-select w-full p-2.5 text-xs"
                 >
                   <option value="whole_sign">Whole Sign (Rashi Bhava - Parasari Classical)</option>
                   <option value="placidus">Placidus (Semi-Arc House Division)</option>

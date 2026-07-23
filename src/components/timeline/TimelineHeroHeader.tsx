@@ -129,7 +129,7 @@ export const TimelineHeroHeader: React.FC<TimelineHeroHeaderProps> = ({
               onChange={handleNameChange}
               onFocus={() => playSound('ink-stroke')}
               placeholder="e.g. Maharishi Valmiki"
-              className="w-full rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-3.5 py-2 font-serif text-sm font-bold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset focus:border-kc-gold-royal focus:outline-none focus:ring-1 focus:ring-kc-gold-royal/80"
+              className="kc-input w-full px-3.5 py-2 font-serif text-sm font-bold"
             />
           </div>
 

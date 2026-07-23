@@ -82,7 +82,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
             setIsOpen(true);
           }}
           placeholder="e.g. Ujjain, Varanasi, Mumbai..."
-          className="w-full rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-4 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset transition-all duration-200 placeholder:text-kc-text-muted/70 focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood shadow-warm"
+          className="kc-input w-full px-4 py-2.5 font-serif text-sm font-semibold shadow-warm"
         />
         <span className="absolute right-3 top-2.5 text-kc-brass dark:text-kc-gold pointer-events-none">
           <LocationPinIcon size={18} />

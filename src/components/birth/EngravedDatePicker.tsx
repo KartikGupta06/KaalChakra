@@ -88,11 +88,12 @@ export const EngravedDatePicker: React.FC<EngravedDatePickerProps> = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {/* Day Select (Simplified to 1..31 for clean visual identity) */}
+        {/* Day Select */}
         <select
           value={day}
           onChange={handleDayChange}
           onFocus={handleInputFocus}
-          className="rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-3 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood transition-all duration-200 cursor-pointer"
+          className="kc-select px-3 py-2.5 font-serif text-sm font-semibold cursor-pointer"
         >
           {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
             <option key={d} value={d} className="bg-kc-paper dark:bg-kc-burnt-brown text-[#1C0F0A] dark:text-[#FDF6E3]">
@@ -106,7 +107,7 @@ export const EngravedDatePicker: React.FC<EngravedDatePickerProps> = ({
           value={month}
           onChange={handleMonthChange}
           onFocus={handleInputFocus}
-          className="rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-3 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood transition-all duration-200 cursor-pointer"
+          className="kc-select px-3 py-2.5 font-serif text-sm font-semibold cursor-pointer"
         >
           {MONTHS.map((m) => (
             <option key={m.value} value={m.value} className="bg-kc-paper dark:bg-kc-burnt-brown text-[#1C0F0A] dark:text-[#FDF6E3]">
@@ -115,7 +116,7 @@ export const EngravedDatePicker: React.FC<EngravedDatePickerProps> = ({
           ))}
         </select>
 
-        {/* Year Input (Natural keyboard, selection, backspace, delete & paste friendly) */}
+        {/* Year Input */}
         <input
           type="text"
           inputMode="numeric"
@@ -126,7 +127,7 @@ export const EngravedDatePicker: React.FC<EngravedDatePickerProps> = ({
           onBlur={handleYearBlur}
           onFocus={handleInputFocus}
           placeholder="Year (e.g. 2010)"
-          className="rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-3 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood transition-all duration-200"
+          className="kc-input px-3 py-2.5 font-serif text-sm font-semibold"
         />
       </div>
     </div>

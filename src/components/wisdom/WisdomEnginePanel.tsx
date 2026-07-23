@@ -121,7 +121,7 @@ export const WisdomEnginePanel: React.FC<WisdomEnginePanelProps> = ({
               placeholder="🔍 Search planets, houses, yogas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-3 pr-8 py-1.5 bg-kc-paper dark:bg-kc-burnt-brown border border-kc-brass/60 rounded-3xs text-xs text-kc-text-primary placeholder:text-kc-text-muted focus:outline-none focus:border-kc-gold"
+              className="kc-input w-full pl-3 pr-8 py-1.5 font-serif text-xs"
             />
             {searchQuery && (
               <button

@@ -86,7 +86,7 @@ export const TempleLibraryHeader: React.FC<TempleLibraryHeaderProps> = ({
             value={filterOptions.searchQuery}
             onChange={(e) => onUpdateFilter({ searchQuery: e.target.value })}
             placeholder={t('search_placeholder', 'Search by name, location, Nakshatra, Rashi, tags...')}
-            className="w-full pl-10 pr-4 py-2.5 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl font-sans text-sm text-kc-text-primary dark:text-kc-text-secondary focus:outline-none focus:border-kc-gold shadow-sm"
+            className="kc-input w-full pl-10 pr-4 py-2.5 font-serif text-sm shadow-sm"
           />
           <span className="absolute left-3.5 top-3 text-kc-text-muted">🔍</span>
         </div>
@@ -98,7 +98,7 @@ export const TempleLibraryHeader: React.FC<TempleLibraryHeaderProps> = ({
             <select
               value={filterOptions.sortBy}
               onChange={(e) => onUpdateFilter({ sortBy: e.target.value as any })}
-              className="w-full py-2 px-3 bg-kc-ivory dark:bg-kc-dark-wood border border-kc-brass/40 rounded-xl font-sans text-xs text-kc-text-primary dark:text-kc-text-secondary focus:outline-none"
+              className="kc-select w-full py-2 px-3 font-serif text-xs"
             >
               <option value="recent">Recently Added</option>
               <option value="name">Name (A-Z)</option>

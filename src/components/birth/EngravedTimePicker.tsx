@@ -47,11 +47,12 @@ export const EngravedTimePicker: React.FC<EngravedTimePickerProps> = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {/* Hour Selector */}
+        {/* Hour Selector */}
         <select
           value={hour}
           onChange={handleHourChange}
           onFocus={handleInputFocus}
-          className="rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-3 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood transition-all duration-200 cursor-pointer"
+          className="kc-select px-3 py-2.5 font-serif text-sm font-semibold cursor-pointer"
         >
           {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => (
             <option key={h} value={h} className="bg-kc-paper dark:bg-kc-burnt-brown text-[#1C0F0A] dark:text-[#FDF6E3]">
@@ -65,7 +66,7 @@ export const EngravedTimePicker: React.FC<EngravedTimePickerProps> = ({
           value={minute}
           onChange={handleMinuteChange}
           onFocus={handleInputFocus}
-          className="rounded-xs bg-kc-sand/70 dark:bg-kc-dark-wood/80 px-3 py-2.5 font-serif text-sm font-semibold text-[#1C0F0A] dark:text-[#FDF6E3] border border-kc-brass/60 dark:border-kc-gold/40 shadow-inset focus:border-kc-gold-royal focus:outline-none focus:ring-2 focus:ring-kc-gold-royal/80 focus:bg-kc-ivory dark:focus:bg-kc-dark-wood transition-all duration-200 cursor-pointer"
+          className="kc-select px-3 py-2.5 font-serif text-sm font-semibold cursor-pointer"
         >
           {Array.from({ length: 60 }, (_, i) => i).map((m) => (
             <option key={m} value={m} className="bg-kc-paper dark:bg-kc-burnt-brown text-[#1C0F0A] dark:text-[#FDF6E3]">
