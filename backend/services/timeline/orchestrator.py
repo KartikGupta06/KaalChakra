@@ -97,12 +97,7 @@ def generate_cosmic_timeline(req: TimelineRequest) -> TimelineResponse:
         transit_events = get_transit_timeline_events()
         all_events.extend(transit_events)
 
-    # Layer 4: Festivals
-    if "festival" in active_layers:
-        festival_events = get_festival_timeline_events()
-        all_events.extend(festival_events)
-
-    # Layer 5: Eclipses
+    # Layer 4: Eclipses
     if "eclipse" in active_layers:
         eclipse_events = get_eclipse_timeline_events()
         all_events.extend(eclipse_events)

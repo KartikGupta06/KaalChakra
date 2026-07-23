@@ -6,7 +6,7 @@
 
 export interface TimelineEvent {
   eventId: string;
-  layer: 'birth' | 'dasha' | 'transit' | 'festival' | 'eclipse' | 'muhurat';
+  layer: 'birth' | 'dasha' | 'transit' | 'eclipse' | 'muhurat';
   title: string;
   sanskritTitle: string;
   category: string;
@@ -17,21 +17,12 @@ export interface TimelineEvent {
   importance: 'Supreme' | 'High' | 'Medium' | 'Subtle';
   badgeColor: string;
   description: string;
+  traditionalMeaning?: string;
+  whyThisMatters?: string;
   panchangContext?: string;
   chartConnection?: string;
   isBookmarked?: boolean;
   metadata?: Record<string, any>;
-}
-
-export interface FestivalEvent {
-  id: string;
-  name: string;
-  sanskritName: string;
-  date: string;
-  paksha: string;
-  tithi: string;
-  significance: string;
-  deity: string;
 }
 
 export interface EclipseEvent {

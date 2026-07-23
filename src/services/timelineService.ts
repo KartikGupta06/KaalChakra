@@ -77,25 +77,10 @@ function buildFallbackTimelineResponse(req: TimelineRequest): TimelineResponse {
       importance: 'Supreme',
       badgeColor: '#D4AF37',
       description: 'Jupiter transits into Taurus (Vrishabha), expanding material assets, family wisdom, and peaceful speech.',
+      traditionalMeaning: 'Guruka Vrishabha Rashi Gochar brings growth in lineage, financial stability, and dharmic learning.',
+      whyThisMatters: 'Activates your 2nd Bhava, magnifying speech, wealth accumulation, and family harmony.',
       panchangContext: 'Ingress Aries to Taurus',
       chartConnection: 'Enhances 2nd house values.',
-      isBookmarked: false,
-    },
-    {
-      eventId: 'evt-fest-diwali',
-      layer: 'festival',
-      title: 'Diwali (Deepavali)',
-      sanskritTitle: '॥ दीपावली / लक्ष्मी पूजन ॥',
-      category: 'Vedic Festival',
-      date: '2026-11-08',
-      dateFormatted: 'November 8, 2026',
-      timeStr: 'Amavasya',
-      icon: '🪔',
-      importance: 'High',
-      badgeColor: '#E67E22',
-      description: 'Festival of lights celebrating victory of light over ignorance and divine Mahalakshmi blessings.',
-      panchangContext: 'Kartika Amavasya',
-      chartConnection: 'Presided by Mahalakshmi & Ganesha.',
       isBookmarked: false,
     },
     {
@@ -111,6 +96,8 @@ function buildFallbackTimelineResponse(req: TimelineRequest): TimelineResponse {
       importance: 'Supreme',
       badgeColor: '#7B1E1E',
       description: 'Total Lunar Eclipse during Phalguna Purnima. Reserved for inner meditation and spiritual purification.',
+      traditionalMeaning: 'Purnima Chandra Grahan signals psychological release and spiritual introspective clarity.',
+      whyThisMatters: 'Prompts inner alignment and shedding of obsolete emotional patterns.',
       panchangContext: 'Leo Rashi • Purva Phalguni',
       chartConnection: 'Nodal eclipse axis activation.',
       isBookmarked: false,
@@ -128,14 +115,16 @@ function buildFallbackTimelineResponse(req: TimelineRequest): TimelineResponse {
       importance: 'High',
       badgeColor: '#D4AF37',
       description: 'Highly favorable timing window evaluated under Shukla Panchami and Pushya Nakshatra.',
+      traditionalMeaning: 'Amrita Siddhi Muhurat window ideal for signing agreements and beginning sacred work.',
+      whyThisMatters: 'Parasari & Muhurta Chintamani score 92/100.',
       panchangContext: 'Shukla Panchami • Pushya Nakshatra',
       chartConnection: 'Parasari & Muhurta Chintamani score 92/100.',
       isBookmarked: false,
     },
   ];
 
-  const activeLayers = req.activeLayers || ['birth', 'dasha', 'transit', 'festival', 'eclipse', 'muhurat'];
-  const filteredEvents = fallbackEvents.filter((e) => activeLayers.includes(e.layer));
+  const activeLayers = req.activeLayers || ['birth', 'dasha', 'transit', 'eclipse', 'muhurat'];
+  const filteredEvents = fallbackEvents.filter((e) => activeLayers.includes(e.layer as any));
 
   return {
     reportId: `KC-TIMELINE-LOCAL-${Date.now().toString(36).toUpperCase()}`,
