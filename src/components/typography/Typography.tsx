@@ -83,7 +83,7 @@ export const SanskritHeading: React.FC<TypographyProps> = ({
 }) => (
   <Component
     className={cn(
-      'font-devanagari text-xl sm:text-2xl font-normal text-kc-gold-royal dark:text-kc-saffron tracking-wider font-serif',
+      'font-devanagari text-xl sm:text-2xl font-medium text-kc-gold-royal dark:text-kc-saffron tracking-normal leading-snug',
       className
     )}
     {...props}

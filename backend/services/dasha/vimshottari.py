@@ -13,7 +13,7 @@ DASHA_LORDS = [
     {"id": "venus", "name": "Venus", "sanskrit": "शुक्र", "symbol": "♀", "years": 20},
     {"id": "sun", "name": "Sun", "sanskrit": "सूर्य", "symbol": "☉", "years": 6},
     {"id": "moon", "name": "Moon", "sanskrit": "चन्द्र", "symbol": "☽", "years": 10},
-    {"id": "mars", "name": "Mars", "sanskrit": "मंगर", "symbol": "♂", "years": 7},
+    {"id": "mars", "name": "Mars", "sanskrit": "मंगल", "symbol": "♂", "years": 7},
     {"id": "rahu", "name": "Rahu", "sanskrit": "राहु", "symbol": "☊", "years": 18},
     {"id": "jupiter", "name": "Jupiter", "sanskrit": "गुरु", "symbol": "♃", "years": 16},
     {"id": "saturn", "name": "Saturn", "sanskrit": "शनि", "symbol": "♄", "years": 19},

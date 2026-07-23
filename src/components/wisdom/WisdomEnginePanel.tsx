@@ -3,6 +3,7 @@ import { WisdomResponse } from '../../types/wisdom';
 import { fetchWisdomInterpretation, buildFallbackWisdom } from '../../services/wisdomService';
 import { TempleBorder } from '../decorations/TempleBorder';
 import { useSound } from '../../context/AudioContext';
+import { useKundali } from '../../context/KundaliContext';
 
 interface WisdomEnginePanelProps {
   birthData?: any;
@@ -10,10 +11,13 @@ interface WisdomEnginePanelProps {
 }
 
 export const WisdomEnginePanel: React.FC<WisdomEnginePanelProps> = ({
-  birthData,
+  birthData: propBirthData,
   className = '',
 }) => {
   const { playSound } = useSound();
+  const { activeKundali } = useKundali();
+  const birthData = propBirthData || activeKundali;
+
   const [wisdom, setWisdom] = useState<WisdomResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 

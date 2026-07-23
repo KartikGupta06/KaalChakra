@@ -67,3 +67,32 @@ class TestAscendant:
         dt = datetime(2026, 7, 22, 12, 0, 0, tzinfo=timezone.utc)
         asc = calc_ascendant(dt, 23.1793, 75.7849)
         assert 0 <= asc < 360
+
+
+class TestMultipleReferenceCharts:
+    def test_historical_chart_1947(self):
+        """Verify Indian Independence chart (15 Aug 1947 00:00 IST = 14 Aug 1947 18:30 UTC, New Delhi)."""
+        dt_utc = datetime(1947, 8, 14, 18, 30, 0, tzinfo=timezone.utc)
+        asc = calc_ascendant(dt_utc, 28.6139, 77.2090)
+        positions = calc_planet_positions(dt_utc, asc)
+        
+        assert len(positions) == 9
+        assert 0 <= asc < 360
+        # Rahu/Ketu opposite
+        rahu = next(p for p in positions if p.id == "rahu")
+        ketu = next(p for p in positions if p.id == "ketu")
+        diff = abs(rahu.longitude - ketu.longitude)
+        assert abs(diff - 180.0) < 1.0 or abs(diff - 180.0 - 360.0) < 1.0
+
+    def test_reference_chart_1998(self):
+        """Verify reference birth chart (15 Aug 1998 06:30 IST = 01:00 UTC, Ujjain)."""
+        dt_utc = datetime(1998, 8, 15, 1, 0, 0, tzinfo=timezone.utc)
+        asc = calc_ascendant(dt_utc, 23.1793, 75.7849)
+        positions = calc_planet_positions(dt_utc, asc)
+
+        assert len(positions) == 9
+        # All planets have valid signIndex and house between 1 and 12
+        for p in positions:
+            assert 1 <= p.signIndex <= 12
+            assert 1 <= p.house <= 12
+

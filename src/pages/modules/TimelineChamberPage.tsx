@@ -9,6 +9,7 @@ import { TempleButton } from '../../components/ui/TempleButton';
 import { SacredFooter } from '../../components/hall/SacredFooter';
 import { paperReveal } from '../../components/animations/variants';
 import { useSound } from '../../context/AudioContext';
+import { useKundali } from '../../context/KundaliContext';
 
 import { TimelineResponse, TimelineEvent } from '../../types/timeline';
 import { generateCosmicTimeline } from '../../services/timelineService';
@@ -28,12 +29,22 @@ const TIMELINE_LAYERS = [
 
 export const TimelineChamberPage: React.FC = () => {
   const { playSound } = useSound();
+  const { activeKundali } = useKundali();
+
+  const formattedDob = activeKundali.date
+    ? `${activeKundali.date.year}-${activeKundali.date.month < 10 ? '0' + activeKundali.date.month : activeKundali.date.month}-${activeKundali.date.day < 10 ? '0' + activeKundali.date.day : activeKundali.date.day}`
+    : '1998-08-15';
+
+  let h24 = activeKundali.time?.hour || 6;
+  if (activeKundali.time?.period === 'PM' && h24 < 12) h24 += 12;
+  if (activeKundali.time?.period === 'AM' && h24 === 12) h24 = 0;
+  const formattedTob = `${h24 < 10 ? '0' + h24 : h24}:${(activeKundali.time?.minute || 30) < 10 ? '0' + (activeKundali.time?.minute || 30) : activeKundali.time?.minute || 30}`;
 
   // State
-  const [fullName, setFullName] = useState<string>('Kartik Gupta');
-  const [dob, setDob] = useState<string>('1998-08-15');
-  const [tob, setTob] = useState<string>('10:30');
-  const [city, setCity] = useState<string>('Ujjain');
+  const [fullName, setFullName] = useState<string>(activeKundali.fullName || 'Observer');
+  const [dob, setDob] = useState<string>(formattedDob);
+  const [tob, setTob] = useState<string>(formattedTob);
+  const [city, setCity] = useState<string>(activeKundali.place?.split(' ')[0] || 'Ujjain');
 
   const [activeLayers, setActiveLayers] = useState<Set<string>>(
     new Set(['birth', 'dasha', 'transit', 'festival', 'eclipse', 'muhurat'])

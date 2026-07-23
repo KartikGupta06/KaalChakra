@@ -44,7 +44,7 @@ def calc_planet_positions(dt: datetime, ascendant_lng: float = 0.0) -> List[Plan
         rashi = rashi_from_longitude(sid_lng)
         nak = nakshatra_from_longitude(sid_lng)
 
-        asc_sign_idx = rashi_from_longitude(ascendant_lng)["index"] if ascendant_lng else 1
+        asc_sign_idx = rashi_from_longitude(ascendant_lng)["index"] if ascendant_lng is not None else 1
         rashi_idx = rashi["index"]
         house = ((rashi_idx - asc_sign_idx) % 12) + 1
 

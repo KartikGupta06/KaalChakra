@@ -10,11 +10,13 @@ import { RevealKundaliButton } from './RevealKundaliButton';
 import { WaxSeal } from '../decorations/WaxSeal';
 import { AncientDivider } from '../decorations/AncientDivider';
 import { useSound } from '../../context/AudioContext';
+import { useKundali } from '../../context/KundaliContext';
 import { generateKundali } from '../../services/api';
 
 export const HeroManuscript: React.FC = () => {
   const navigate = useNavigate();
   const { playSound } = useSound();
+  const { setActiveKundali } = useKundali();
 
   const [fullName, setFullName] = useState<string>('');
   const [gender, setGender] = useState<'male' | 'female' | 'other'>('male');
@@ -59,19 +61,24 @@ export const HeroManuscript: React.FC = () => {
       city: cleanCity,
     });
 
+    const activeData = {
+      fullName,
+      gender,
+      date,
+      time,
+      place,
+      planets: kundaliResult?.planets,
+      ascendantSign: kundaliResult?.ascendantSign || 'Leo (सिंह)',
+      yogas: kundaliResult?.yogas,
+      kundaliData: kundaliResult,
+    };
+
+    setActiveKundali(activeData);
+
     // Ink spread & golden illumination sequence before transition
     setTimeout(() => {
       navigate('/kundali/view', {
-        state: {
-          fullName,
-          gender,
-          date,
-          time,
-          place,
-          planets: kundaliResult?.planets,
-          ascendantSign: kundaliResult?.ascendantSign,
-          yogas: kundaliResult?.yogas,
-        },
+        state: activeData,
       });
     }, 1000);
   };

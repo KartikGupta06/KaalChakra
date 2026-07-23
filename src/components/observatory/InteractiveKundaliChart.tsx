@@ -28,18 +28,20 @@ const getPlanetCoords = (
     return { x: baseX, y: baseY + 4 };
   }
   if (totalPlanets === 2) {
-    const offsetY = (pIdx - 0.5) * 22;
+    const offsetY = (pIdx - 0.5) * 20;
     return { x: baseX, y: baseY + 4 + offsetY };
   }
   if (totalPlanets === 3) {
-    if (pIdx === 0) return { x: baseX - 26, y: baseY - 6 };
-    if (pIdx === 1) return { x: baseX + 26, y: baseY - 6 };
-    return { x: baseX, y: baseY + 18 };
+    if (pIdx === 0) return { x: baseX - 22, y: baseY - 6 };
+    if (pIdx === 1) return { x: baseX + 22, y: baseY - 6 };
+    return { x: baseX, y: baseY + 16 };
   }
+  // 4 or more planets: 2-column balanced grid centered at house coordinate
   const col = pIdx % 2;
   const row = Math.floor(pIdx / 2);
-  const offsetX = (col - 0.5) * 52;
-  const offsetY = (row - 0.5) * 22;
+  const numRows = Math.ceil(totalPlanets / 2);
+  const offsetX = (col - 0.5) * 44;
+  const offsetY = (row - (numRows - 1) / 2) * 18;
   return { x: baseX + offsetX, y: baseY + 4 + offsetY };
 };
 

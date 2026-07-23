@@ -17,29 +17,30 @@ import { SacredFooter } from '../components/hall/SacredFooter';
 import { paperReveal } from '../components/animations/variants';
 import { TempleButton } from '../components/ui/TempleButton';
 
+import { useKundali } from '../context/KundaliContext';
+
 export const KundaliRevelationPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const state = (location.state as {
-    fullName?: string;
-    gender?: string;
-    date?: { day: number; month: number; year: number };
-    time?: { hour: number; minute: number; period: string };
-    place?: string;
-    ascendantSign?: string;
-    planets?: any[];
-  }) || {};
+  const { activeKundali } = useKundali();
 
-  const name = state.fullName || 'Observer';
-  const place = state.place || 'Ujjain (उज्जैन)';
-  const dateStr = state.date ? `${state.date.day}/${state.date.month}/${state.date.year}` : '15/8/1998';
-  const timeStr = state.time ? `${state.time.hour}:${state.time.minute < 10 ? '0' + state.time.minute : state.time.minute} ${state.time.period}` : '6:30 AM';
+  const state = (location.state as any) || {};
 
-  const ascendantSign = state.ascendantSign || 'Sagittarius (धनु)';
-  const moonPlacement = state.planets?.find((p: any) => p.id === 'moon');
-  const sunPlacement = state.planets?.find((p: any) => p.id === 'sun');
-  const moonSign = moonPlacement?.sign || 'Leo (सिंह)';
-  const sunSign = sunPlacement?.sign || 'Virgo (कन्या)';
+  const name = state.fullName || activeKundali.fullName;
+  const place = state.place || activeKundali.place;
+  const dateObj = state.date || activeKundali.date;
+  const timeObj = state.time || activeKundali.time;
+
+  const dateStr = dateObj ? `${dateObj.day}/${dateObj.month}/${dateObj.year}` : '15/8/1998';
+  const timeStr = timeObj ? `${timeObj.hour}:${timeObj.minute < 10 ? '0' + timeObj.minute : timeObj.minute} ${timeObj.period}` : '6:30 AM';
+
+  const planets = state.planets && state.planets.length > 0 ? state.planets : activeKundali.planets;
+  const ascendantSign = state.ascendantSign || activeKundali.ascendantSign;
+
+  const moonPlacement = planets?.find((p: any) => p.id === 'moon');
+  const sunPlacement = planets?.find((p: any) => p.id === 'sun');
+  const moonSign = moonPlacement?.sign || activeKundali.moonSign;
+  const sunSign = sunPlacement?.sign || activeKundali.sunSign;
 
   const [isPlayingSequence, setIsPlayingSequence] = useState<boolean>(true);
   const [isManuscriptModalOpen, setIsManuscriptModalOpen] = useState<boolean>(false);
@@ -110,12 +111,12 @@ export const KundaliRevelationPage: React.FC = () => {
 
                 {/* Center Column: North Indian Kundali Chart */}
                 <div className="lg:col-span-6 w-full order-1 lg:order-2">
-                  <NorthIndianKundali planets={state.planets} />
+                  <NorthIndianKundali planets={planets} />
                 </div>
 
                 {/* Right Column: Planetary Alignment Table */}
                 <div className="lg:col-span-3 w-full order-3">
-                  <PlanetaryPanel planets={state.planets} />
+                  <PlanetaryPanel planets={planets} />
                 </div>
               </div>
             </SectionWrapper>

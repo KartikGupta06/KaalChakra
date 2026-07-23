@@ -18,7 +18,10 @@ import { paperReveal } from '../animations/variants';
 import { GrahaPlacement } from '../revelation/NorthIndianKundali';
 import { TempleButton } from '../ui/TempleButton';
 
+import { useKundali } from '../../context/KundaliContext';
+
 export const CelestialObservatory: React.FC = () => {
+  const { activeKundali } = useKundali();
   const [selectedPlanet, setSelectedPlanet] = useState<GrahaPlacement | null>(null);
   const [selectedHouse, setSelectedHouse] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<'chart' | 'zodiac' | 'navamsa' | 'nakshatra'>('chart');
@@ -115,6 +118,7 @@ export const CelestialObservatory: React.FC = () => {
               <div className="lg:col-span-6 w-full order-1 lg:order-2 flex flex-col items-center">
                 {activeTab === 'chart' && (
                   <InteractiveKundaliChart
+                    planets={activeKundali.planets}
                     selectedPlanetId={selectedPlanet?.id}
                     selectedHouse={selectedHouse}
                     onSelectPlanet={handleSelectPlanet}

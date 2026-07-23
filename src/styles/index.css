@@ -122,6 +122,13 @@
   .kc-glow-lamp {
     box-shadow: var(--kc-glow-lamp);
   }
+
+  .font-devanagari {
+    font-family: "Tiro Devanagari Sanskrit", "Noto Serif Devanagari", serif;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+    line-height: 1.3;
+  }
 }
 
 /* A4 Print Layout Rules */

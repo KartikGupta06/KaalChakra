@@ -29,12 +29,15 @@ const PAGE_TITLES = [
   '12. Wisdom Interpretation (ज्ञान व्याख्या)',
 ];
 
+import { useKundali } from '../../context/KundaliContext';
+
 export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
   isOpen,
   onClose,
   rawBirthData,
 }) => {
   const { playSound } = useSound();
+  const { activeKundali } = useKundali();
   const documentRef = useRef<HTMLDivElement>(null);
 
   const [manuscriptData, setManuscriptData] = useState<RoyalManuscriptData | null>(null);
@@ -59,7 +62,12 @@ export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
   // Initialize manuscript data & run ceremonial generation sequence
   useEffect(() => {
     if (isOpen) {
-      const data = buildRoyalManuscriptData(rawBirthData);
+      const mergedData = {
+        ...activeKundali,
+        ...(rawBirthData || {}),
+        planets: rawBirthData?.planets || activeKundali.planets,
+      };
+      const data = buildRoyalManuscriptData(mergedData);
       setManuscriptData(data);
       setIsGenerating(true);
       setGenerationStep(0);
@@ -84,7 +92,7 @@ export const RoyalManuscriptModal: React.FC<RoyalManuscriptModalProps> = ({
 
       return () => clearInterval(interval);
     }
-  }, [isOpen, rawBirthData]);
+  }, [isOpen, rawBirthData, activeKundali]);
 
   if (!isOpen || !manuscriptData) return null;
 

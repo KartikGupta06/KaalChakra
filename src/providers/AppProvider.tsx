@@ -5,6 +5,7 @@ import { NavigationProvider } from '../context/NavigationContext';
 import { SettingsProvider } from '../context/SettingsContext';
 import { LocalizationProvider } from '../context/LocalizationContext';
 import { NotificationProvider } from '../context/NotificationContext';
+import { KundaliProvider } from '../context/KundaliContext';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -13,7 +14,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         <LocalizationProvider>
           <NotificationProvider>
             <AudioProvider>
-              <NavigationProvider>{children}</NavigationProvider>
+              <KundaliProvider>
+                <NavigationProvider>{children}</NavigationProvider>
+              </KundaliProvider>
             </AudioProvider>
           </NotificationProvider>
         </LocalizationProvider>
@@ -21,3 +24,4 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     </ThemeProvider>
   );
 };
+
