@@ -65,17 +65,16 @@ export const KalachakraWheel: React.FC = () => {
             strokeWidth="1.5"
           />
 
-          {/* Center Om / Surya Hub */}
+          {/* Center Hub Disk (Obstructing node removed) */}
           <circle cx="250" cy="250" r="40" fill="#3A2414" stroke="#D4AF37" strokeWidth="2.5" />
-          <circle cx="250" cy="250" r="12" fill="#D4AF37" />
         </svg>
 
-        {/* Static Center Emblem Overlay */}
+        {/* Static Center Om Symbol Overlay */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <motion.span
             animate={{ scale: [0.95, 1.05, 0.95] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            className="font-devanagari text-2xl sm:text-3xl font-bold text-kc-gold-royal drop-shadow-md select-none"
+            className="font-devanagari text-2xl sm:text-3xl font-bold text-kc-gold-royal drop-shadow-md select-none z-10"
           >
             ॐ
           </motion.span>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSound } from '../../context/AudioContext';
 import { cardLift } from '../animations/variants';
 import { cn } from '../../lib/utils';
+import { EngravedIcon } from '../ui/EngravedIcon';
 
 export interface ChamberData {
   id: string;
@@ -27,6 +28,8 @@ export const ChamberCard: React.FC<{ chamber: ChamberData; className?: string }>
     playSound('ink-stroke');
     navigate(chamber.path);
   };
+
+  const romanNumeral = chamber.badge ? chamber.badge.replace(/^Chamber\s+/i, '') : '';
 
   return (
     <motion.div
@@ -54,8 +57,8 @@ export const ChamberCard: React.FC<{ chamber: ChamberData; className?: string }>
       {/* Header Row: Icon & Sanskrit Subtitle */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <span className="text-2xl sm:text-3xl p-2 rounded-xs bg-kc-sand/60 dark:bg-kc-dark-wood border border-kc-brass/40 text-kc-maroon dark:text-kc-gold group-hover:scale-110 transition-transform">
-            {chamber.icon}
+          <span className="p-2.5 rounded-xs bg-kc-sand/60 dark:bg-kc-dark-wood border border-kc-brass/40 text-kc-maroon dark:text-kc-gold group-hover:scale-110 transition-transform">
+            <EngravedIcon name={chamber.icon} className="w-6 h-6 stroke-[1.5]" />
           </span>
           <div>
             <h3 className="font-heading text-lg sm:text-xl font-bold text-kc-maroon dark:text-kc-gold tracking-wide group-hover:text-kc-maroon dark:group-hover:text-kc-gold-light">
@@ -67,10 +70,12 @@ export const ChamberCard: React.FC<{ chamber: ChamberData; className?: string }>
           </div>
         </div>
 
+        {/* Two-Line Consistent Chamber Badge */}
         {chamber.badge && (
-          <span className="font-heading text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-xs bg-kc-maroon/10 text-kc-maroon border border-kc-maroon/30 dark:bg-kc-gold/10 dark:text-kc-gold dark:border-kc-gold/40">
-            {chamber.badge}
-          </span>
+          <div className="flex flex-col items-center justify-center font-heading text-[9px] uppercase tracking-widest px-2.5 py-1 leading-tight text-center rounded-xs bg-kc-maroon/10 text-kc-maroon border border-kc-maroon/30 dark:bg-kc-gold/10 dark:text-kc-gold dark:border-kc-gold/40">
+            <span className="opacity-75">CHAMBER</span>
+            <span className="font-bold text-[11px] mt-0.5">{romanNumeral}</span>
+          </div>
         )}
       </div>
 

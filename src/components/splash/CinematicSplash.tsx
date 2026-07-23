@@ -74,10 +74,11 @@ export const CinematicSplash: React.FC = () => {
     setIsTransitioning(true);
     playSound('temple-bell');
 
-    // Smooth 900ms expanding golden light transition into application
+    // Ceremonial 2.8s hold on bright manuscript screen before transitioning into Sacred Hall
     setTimeout(() => {
+      playSound('temple-bell');
       navigate('/app');
-    }, 900);
+    }, 2800);
   };
 
   const skipIntro = () => {
@@ -172,23 +173,35 @@ export const CinematicSplash: React.FC = () => {
         )}
       </div>
 
-      {/* Fullscreen Golden Transition Overlay on Button Click */}
+      {/* Fullscreen Ceremonial Bright Manuscript Transition Overlay */}
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.85, ease: 'easeInOut' }}
-            className="fixed inset-0 z-50 bg-gradient-to-b from-[#F4E7C8] via-[#E7D1A3] to-[#F8F0DD] flex items-center justify-center text-kc-maroon font-heading text-xl font-bold tracking-widest uppercase"
+            className="fixed inset-0 z-50 bg-gradient-to-b from-[#F4E7C8] via-[#E7D1A3] to-[#F8F0DD] flex items-center justify-center text-kc-maroon font-heading text-xl font-bold tracking-widest uppercase shadow-2xl"
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center gap-3"
+              initial={{ scale: 0.92, opacity: 0, y: 12 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="flex flex-col items-center gap-4 text-center max-w-lg p-8 bg-[#F4E7C8]/80 border-2 border-kc-brass/50 rounded-xs shadow-deep"
             >
-              <span className="text-4xl animate-pulse">☸</span>
-              <span>Kalachakra Foundation Initialized...</span>
+              <div className="font-devanagari text-4xl text-kc-gold-royal drop-shadow">
+                ॥ कालचक्र जगत् सर्वं ॥
+              </div>
+              <h2 className="font-heading text-3xl font-extrabold tracking-wider text-kc-maroon">
+                KALACHAKRA
+              </h2>
+              <div className="font-serif text-sm text-kc-text-secondary tracking-widest uppercase">
+                The Eternal Wheel of Time
+              </div>
+              <div className="w-28 h-0.5 bg-kc-gold-royal/60 my-2 rounded-full" />
+              <span className="font-serif text-xs text-kc-text-muted italic">
+                Entering the Sacred Knowledge Hub...
+              </span>
             </motion.div>
           </motion.div>
         )}
