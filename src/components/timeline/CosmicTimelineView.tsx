@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TimelineEvent } from '../../types/timeline';
 import {
   RoyalSealIcon,
@@ -29,44 +29,11 @@ export const CosmicTimelineView: React.FC<CosmicTimelineViewProps> = ({
 }) => {
   const { playSound } = useSound();
   const reducedMotion = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
   const [expandedCardIds, setExpandedCardIds] = useState<Set<string>>(new Set());
-
-  // Scroll Progress Engine for Brass Rail Illumination
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  const railHeightPercent = useTransform(smoothProgress, [0, 1], ['0%', '100%']);
-
-  // Dynamic Scroll Story Chapter derived from scroll progress
-  const chapterTitle = useTransform(smoothProgress, (p) => {
-    if (p < 0.15) return { text: '🌅 Janma Chapter • The Birth Moment', sanskrit: '॥ जन्म अध्याय ॥' };
-    if (p < 0.35) return { text: '🪐 Active Planetary Cycle & Dasha', sanskrit: '॥ महादशा एवं गोचर ॥' };
-    if (p < 0.6) return { text: '☀ Major Planetary Transits & Ingress', sanskrit: '॥ ग्रह गोचर प्रवाह ॥' };
-    if (p < 0.8) return { text: '🌑 Eclipse Windows & Nodal Shifts', sanskrit: '॥ ग्रहण एवं छाया काल ॥' };
-    return { text: '🌄 The Road Ahead • Future Celestial Milestones', sanskrit: '॥ उत्तर काल ॥' };
-  });
-
-  const [currentChapter, setCurrentChapter] = useState<{ text: string; sanskrit: string }>({
-    text: '🌅 Janma Chapter • The Birth Moment',
-    sanskrit: '॥ जन्म अध्याय ॥',
-  });
-
-  chapterTitle.on('change', (latest) => {
-    setCurrentChapter(latest);
-  });
 
   if (!events || events.length === 0) {
     return (
-      <div className="p-8 text-center bg-kc-paper dark:bg-kc-burnt-brown border-2 border-kc-brass rounded-xs my-6">
+      <div className="p-8 text-center bg-kc-paper dark:bg-kc-burnt-brown border-2 border-kc-brass rounded-xs my-6 shadow-warm">
         <p className="font-serif text-sm text-kc-text-muted italic">
           No celestial milestones found for the selected filter layer. Select another layer to observe your cosmic stream.
         </p>
@@ -102,29 +69,7 @@ export const CosmicTimelineView: React.FC<CosmicTimelineViewProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="w-full font-serif select-none my-6 relative">
-      {/* Sticky Floating Scroll Story Chapter Strip */}
-      <div className="sticky top-16 z-30 mb-4 flex items-center justify-center pointer-events-none">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentChapter.text}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.3 }}
-            className="px-4 py-1.5 bg-kc-paper/95 dark:bg-kc-burnt-brown/95 border-2 border-kc-gold/70 shadow-deep rounded-full backdrop-blur-md flex items-center gap-2 pointer-events-auto"
-          >
-            <span className="h-2 w-2 rounded-full bg-kc-gold-royal animate-pulse" />
-            <span className="font-heading text-xs font-bold text-kc-maroon dark:text-kc-gold tracking-wider uppercase">
-              {currentChapter.text}
-            </span>
-            <span className="font-devanagari text-xs text-kc-gold-royal dark:text-kc-saffron font-semibold">
-              {currentChapter.sanskrit}
-            </span>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
+    <div className="w-full font-serif select-none my-6 relative">
       {/* Handcrafted Manuscript Timeline Outer Shell */}
       <div className="relative p-4 sm:p-8 bg-kc-paper dark:bg-kc-burnt-brown border-2 border-kc-brass shadow-deep rounded-xs overflow-hidden">
         {/* Inner Hairline */}
@@ -146,17 +91,8 @@ export const CosmicTimelineView: React.FC<CosmicTimelineViewProps> = ({
           </span>
         </div>
 
-        {/* Engraved Vertical Brass Rail Container */}
-        <div className="relative pl-8 sm:pl-12 space-y-10">
-          {/* Static Dim Rail Background Line */}
-          <div className="absolute left-4 sm:left-6 top-2 bottom-2 w-1 bg-kc-sand/60 dark:bg-kc-dark-wood border-x border-kc-brass/30 rounded-full" />
-
-          {/* Illuminated Dynamic Brass Rail Overlay */}
-          <motion.div
-            className="absolute left-4 sm:left-6 top-2 w-1 bg-gradient-to-b from-kc-gold via-kc-gold-royal to-kc-saffron rounded-full shadow-[0_0_10px_rgba(212,175,55,0.8)] z-0"
-            style={{ height: railHeightPercent }}
-          />
-
+        {/* Static Engraved Brass Celestial Vertical Rail Line */}
+        <div className="relative pl-8 sm:pl-12 space-y-10 before:absolute before:left-4 sm:before:left-6 before:top-2 before:bottom-2 before:w-1 before:bg-gradient-to-b before:from-kc-gold before:via-kc-brass before:to-kc-gold/40 before:rounded-full">
           {events.map((evt, idx) => {
             const isBookmarked = bookmarkedIds.has(evt.eventId);
             const isToday = evt.date === currentDateStr;
@@ -166,10 +102,10 @@ export const CosmicTimelineView: React.FC<CosmicTimelineViewProps> = ({
             return (
               <motion.div
                 key={evt.eventId}
-                initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 35, scale: 0.98 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.6, delay: Math.min(idx * 0.04, 0.25) }}
+                initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: Math.min(idx * 0.03, 0.2) }}
                 className="relative"
               >
                 {/* Engraved Brass Node Badge on Rail */}
@@ -248,7 +184,7 @@ export const CosmicTimelineView: React.FC<CosmicTimelineViewProps> = ({
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.25 }}
                         className="mt-4 pt-3 border-t border-kc-brass/30 space-y-3"
                       >
                         {evt.traditionalMeaning && (
